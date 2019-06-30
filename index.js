@@ -1,52 +1,62 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
+const expressEdge = require('express-edge');
 
 const app = new express();
 
 app.use(express.static('public'));
 
+app.use(expressEdge);
+
+app.set('views', `${__dirname}/views`);
+
 
 app.get('/', (req, res)=>{
-    res.sendFile(path.resolve(__dirname, 'pages/index.html'))
+    res.render('index');
 });
 
 app.get('/comedy', (req, res)=>{
-    res.sendFile(path.resolve(__dirname, 'pages/comedy.html'))
-})
+    res.render('comedy');
+});
+
 app.get('/contact', (req, res)=>{
-    res.sendFile(path.resolve(__dirname, 'pages/contact.html'))
-})
+    res.render('contact');
+});
+
 app.get('/faq', (req, res)=>{
-    res.sendFile(path.resolve(__dirname, 'pages/faq.html'))
-})
-app.get('/generes', (req, res)=>{
-    res.sendFile(path.resolve(__dirname, 'pages/generes.html'))
-})
+    res.render('faq');
+});
+app.get('/genres', (req, res)=>{
+    res.render('generes');
+});
 app.get('/horror', (req, res)=>{
-    res.sendFile(path.resolve(__dirname, 'pages/horror.html'))
-})
+    res.render('horror');
+});
 app.get('/icons', (req, res)=>{
-    res.sendFile(path.resolve(__dirname, 'pages/icons.html'))
-})
+    res.render('icons');
+});
 app.get('/list', (req, res)=>{
-    res.sendFile(path.resolve(__dirname, 'pages/list.html'))
-})
+    res.render('list');
+});
 app.get('/news', (req, res)=>{
-    res.sendFile(path.resolve(__dirname, 'pages/news.html'))
-})
+    res.render('news');
+});
 app.get('/news-single', (req, res)=>{
-    res.sendFile(path.resolve(__dirname, 'pages/news-single.html'))
-})
+    res.render('news-single');
+});
 app.get('/series', (req, res)=>{
-    res.sendFile(path.resolve(__dirname, 'pages/series.html'))
-})
+    res.render('series');
+});
 app.get('/short-codes', (req, res)=>{
-    res.sendFile(path.resolve(__dirname, 'pages/short-codes.html'))
-})
+    res.render('short-codes');
+});
 app.get('/single', (req, res)=>{
-    res.sendFile(path.resolve(__dirname, 'pages/single.html'))
-})
+    res.render('single');
+});
+app.get('*', (req, res)=>{
+    res.send('Sorry No Pages Found')
+});
 
 
 const port = 5000;
