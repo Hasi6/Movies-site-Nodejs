@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const MoviesSchema = new mongoose.Schema({
+const MoviesSlideSchema = new mongoose.Schema({
     name:{
         type: String,
         required: true
@@ -28,6 +28,6 @@ const MoviesSchema = new mongoose.Schema({
     }
 });
 
-const Movies = mongoose.model('Movies', MoviesSchema);
+const MoviesSlide = mongoose.model('MoviesSlide', MoviesSlideSchema);
 
-module.exports = Movies;
+module.exports = MoviesSlide;
