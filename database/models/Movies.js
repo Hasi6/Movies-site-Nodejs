@@ -21,6 +21,9 @@ const MoviesSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    idbmRating: String,
+    country: String,
+    category: String,
     image: String,
     createdDate:{
         type: Date,

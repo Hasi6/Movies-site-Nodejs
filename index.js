@@ -6,7 +6,8 @@ const bodyParser = require("body-parser");
 const fileUpload = require("express-fileupload");
 
 const Movies = require("./database/models/Movies");
-const MoviesSlides = require("./database/models/MoviesSlide");
+const Category = require("./database/models/Category");
+const Country = require("./database/models/Country");
 
 
 const app = new express();
@@ -37,11 +38,19 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get("/", async (req, res) => {
 
-const MoviesSlide = await MoviesSlides.find().limit(12).sort({year: -1});
-const movies = await Movies.find().limit(12).sort({year: -1});
+const MoviesSlide = await Movies.find().limit(12).sort({createDate: -1});
+const movies = await Movies.find().limit(12).sort({createDate: -1});
+const MoviesHeaders = await Movies.find().limit(12).sort({createDate: -1});
+const RatingMovies = await Movies.find().limit(12).sort({idbmRating: -1});
+const popularMovies = await Movies.find().limit(3);
+const popularActionMovies = await Movies.find({category: 'Action'}).limit(6);
 res.render("index", {
   movies: movies,
-  MoviesSlide: MoviesSlide
+  MoviesSlide: MoviesSlide,
+  MoviesHeaders: MoviesHeaders,
+  RatingMovies: RatingMovies,
+  popularMovies: popularMovies,
+  popularActionMovies: popularActionMovies
 });
 });
 
@@ -70,11 +79,19 @@ app.get("/genres", (req, res) => {
 app.get("/horror", (req, res) => {
   res.render("horror");
 });
-app.get("/addMovies", (req, res) => {
-  res.render("addMovies");
+app.get("/addMovies", async (req, res) => {
+  const countries = await Country.find().sort({createDate: -1});
+  const categories = await Category.find().sort({createDate: -1})
+  res.render("addMovies",{
+    countries: countries,
+    categories: categories,
+  });
 });
-app.get("/addMoviesSlide", (req, res) => {
-  res.render("addMoviesSlide");
+app.get("/addCategory", (req, res) => {
+  res.render("addCategory");
+});
+app.get("/addCountry", (req, res) => {
+  res.render("addCountry");
 });
 app.get("/list", (req, res) => {
   res.render("list");
@@ -93,7 +110,7 @@ app.get("/short-codes", (req, res) => {
 });
 
 app.get("/single/:id", async (req, res) => {
-  const singleMovie = await MoviesSlides.findById(req.params.id);
+  const singleMovie = await Movies.findById(req.params.id);
   res.render("single",{
     singleMovie: singleMovie
 });
@@ -121,18 +138,17 @@ app.post("/addMovies/store", (req, res) => {
   });
 });
 
-app.post("/addMoviesSlide/store", (req, res) => {
-  const { image } = req.files
+app.post("/addCategory/store", (req, res) => {
+  Category.create(req.body, (err, post) => {
+    res.redirect("/");
+  });
+});
 
-  image.mv(path.resolve(__dirname, 'public/movieSlideImages', image.name), (err)=>{
-    MoviesSlides.create({
-      ...req.body,
-      image: `/movieSlideImages/${image.name}`
-    }, (err, post) => {
+app.post("/addCountry/store", (req, res) => {
+    Country.create(req.body, (err, post) => {
       res.redirect("/");
     });
   });
-});
 
 const port = 5000;
 
