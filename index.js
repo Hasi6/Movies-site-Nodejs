@@ -93,8 +93,27 @@ app.get("/addCategory", (req, res) => {
 app.get("/addCountry", (req, res) => {
   res.render("addCountry");
 });
-app.get("/list", (req, res) => {
-  res.render("list");
+app.get("/list/:page", async (req, res, next) => {
+  let perPage = 1;
+  let page = req.params.page || 1;
+
+  let allMoviesCount = await Movies.count();
+  console.log(allMoviesCount);
+  let lastPage = allMoviesCount / perPage;
+  console.log(Math.ceil(lastPage));
+
+  if(page < 0 || page > lastPage + 1){
+    res.send("Sorry This page is not available");
+  }
+
+  let allMovies = await Movies.find().skip((perPage * page) - perPage)
+  .limit(perPage).sort({createDate: 1});
+  res.render("list",{
+    allMovies: allMovies,
+    page: page,
+    pages: Math.ceil(lastPage),
+    perPage:perPage
+  });
 });
 app.get("/news", (req, res) => {
   res.render("news");
