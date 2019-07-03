@@ -93,14 +93,14 @@ app.get("/addCategory", (req, res) => {
 app.get("/addCountry", (req, res) => {
   res.render("addCountry");
 });
-app.get("/list/:page", async (req, res, next) => {
+
+// get All movies
+app.get("/list/:page", async (req, res) => {
   let perPage = 1;
   let page = req.params.page || 1;
 
   let allMoviesCount = await Movies.count();
-  console.log(allMoviesCount);
   let lastPage = allMoviesCount / perPage;
-  console.log(Math.ceil(lastPage));
 
   if(page < 0 || page > lastPage + 1){
     res.send("Sorry This page is not available");
@@ -115,6 +115,35 @@ app.get("/list/:page", async (req, res, next) => {
     perPage:perPage
   });
 });
+
+// get movies sort by name
+app.get("/list/:letter/:page", async (req, res) => {
+  let perPage = 1;
+  let page = req.params.page || 1;
+  let letter = req.params.letter || 'a';
+
+
+  let allMoviesStartedWithLetter = await Movies.find({name : {$regex : '^{letter}', $options: 'i'}}).count();
+
+  let lastPage = allMoviesStartedWithLetter / perPage;
+
+  if(page < 0 || page > lastPage + 1){
+    res.send("Sorry This page is not available");
+  }
+
+  let allMovies = await Movies.find({name : {$regex : '^a', $options: 'i'}}).skip((perPage * page) - perPage)
+  .limit(perPage).sort({createDate: 1});
+  res.render("listByName",{
+    allMovies: allMovies,
+    page: page,
+    pages: Math.ceil(lastPage),
+    perPage:perPage
+  });
+});
+
+
+
+
 app.get("/news", (req, res) => {
   res.render("news");
 });
