@@ -9,7 +9,6 @@ const Movies = require("./database/models/Movies");
 const Category = require("./database/models/Category");
 const Country = require("./database/models/Country");
 
-
 const app = new express();
 
 app.use(express.static("public"));
@@ -33,25 +32,33 @@ app.use(bodyParser.json());
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
-
 // Get requests
 
 app.get("/", async (req, res) => {
-
-const MoviesSlide = await Movies.find().limit(12).sort({createDate: -1});
-const movies = await Movies.find().limit(12).sort({createDate: -1});
-const MoviesHeaders = await Movies.find().limit(12).sort({createDate: -1});
-const RatingMovies = await Movies.find().limit(12).sort({idbmRating: -1});
-const popularMovies = await Movies.find().limit(3);
-const popularActionMovies = await Movies.find({category: 'Action'}).limit(6);
-res.render("index", {
-  movies: movies,
-  MoviesSlide: MoviesSlide,
-  MoviesHeaders: MoviesHeaders,
-  RatingMovies: RatingMovies,
-  popularMovies: popularMovies,
-  popularActionMovies: popularActionMovies
-});
+  const MoviesSlide = await Movies.find()
+    .limit(12)
+    .sort({ createDate: -1 });
+  const movies = await Movies.find()
+    .limit(12)
+    .sort({ createDate: -1 });
+  const MoviesHeaders = await Movies.find()
+    .limit(12)
+    .sort({ createDate: -1 });
+  const RatingMovies = await Movies.find()
+    .limit(12)
+    .sort({ idbmRating: -1 });
+  const popularMovies = await Movies.find().limit(3);
+  const popularActionMovies = await Movies.find({ category: "Action" }).limit(
+    6
+  );
+  res.render("index", {
+    movies: movies,
+    MoviesSlide: MoviesSlide,
+    MoviesHeaders: MoviesHeaders,
+    RatingMovies: RatingMovies,
+    popularMovies: popularMovies,
+    popularActionMovies: popularActionMovies
+  });
 });
 
 // app.get("/", async (req, res) => {
@@ -80,11 +87,11 @@ app.get("/horror", (req, res) => {
   res.render("horror");
 });
 app.get("/addMovies", async (req, res) => {
-  const countries = await Country.find().sort({createDate: -1});
-  const categories = await Category.find().sort({createDate: -1})
-  res.render("addMovies",{
+  const countries = await Country.find().sort({ createDate: -1 });
+  const categories = await Category.find().sort({ createDate: -1 });
+  res.render("addMovies", {
     countries: countries,
-    categories: categories,
+    categories: categories
   });
 });
 app.get("/addCategory", (req, res) => {
@@ -99,20 +106,22 @@ app.get("/list/:page", async (req, res) => {
   let perPage = 1;
   let page = req.params.page || 1;
 
-  let allMoviesCount = await Movies.count();
+  let allMoviesCount = await Movies.countDocuments();
   let lastPage = allMoviesCount / perPage;
 
-  if(page < 0 || page > lastPage + 1){
+  if (page < 0 || page > lastPage + 1) {
     res.send("Sorry This page is not available");
   }
 
-  let allMovies = await Movies.find().skip((perPage * page) - perPage)
-  .limit(perPage).sort({createDate: 1});
-  res.render("list",{
+  let allMovies = await Movies.find()
+    .skip(perPage * page - perPage)
+    .limit(perPage)
+    .sort({ createDate: 1 });
+  res.render("list", {
     allMovies: allMovies,
     page: page,
     pages: Math.ceil(lastPage),
-    perPage:perPage
+    perPage: perPage
   });
 });
 
@@ -120,29 +129,29 @@ app.get("/list/:page", async (req, res) => {
 app.get("/list/:letter/:page", async (req, res) => {
   let perPage = 1;
   let page = req.params.page || 1;
-  let letter = req.params.letter || 'a';
+  let letter = req.params.letter || "a";
 
-
-  let allMoviesStartedWithLetter = await Movies.find({name : {$regex : '^{letter}', $options: 'i'}}).count();
+  let allMoviesStartedWithLetter = await Movies.find({ name : { $regex: '^'+letter, $options: 'i'}}).countDocuments();
+  console.log(allMoviesStartedWithLetter);
 
   let lastPage = allMoviesStartedWithLetter / perPage;
 
-  if(page < 0 || page > lastPage + 1){
+  if (page < 0 || page > lastPage + 1) {
     res.send("Sorry This page is not available");
   }
 
-  let allMovies = await Movies.find({name : {$regex : '^a', $options: 'i'}}).skip((perPage * page) - perPage)
-  .limit(perPage).sort({createDate: 1});
-  res.render("listByName",{
+  let allMovies = await Movies.find({ name : { $regex: '^'+letter, $options: 'i'}})
+    .skip(perPage * page - perPage)
+    .limit(perPage)
+    .sort({ createDate: 1 });
+  res.render("listByName", {
     allMovies: allMovies,
     page: page,
     pages: Math.ceil(lastPage),
-    perPage:perPage
+    perPage: perPage,
+    letter: letter
   });
 });
-
-
-
 
 app.get("/news", (req, res) => {
   res.render("news");
@@ -159,9 +168,9 @@ app.get("/short-codes", (req, res) => {
 
 app.get("/single/:id", async (req, res) => {
   const singleMovie = await Movies.findById(req.params.id);
-  res.render("single",{
+  res.render("single", {
     singleMovie: singleMovie
-});
+  });
 });
 
 app.get("/single", async (req, res) => {
@@ -174,15 +183,18 @@ app.get("*", (req, res) => {
 
 // Post requests
 app.post("/addMovies/store", (req, res) => {
-  const { image } = req.files
+  const { image } = req.files;
 
-  image.mv(path.resolve(__dirname, 'public/movieImages', image.name), (err)=>{
-    Movies.create({
-      ...req.body,
-      image: `/movieImages/${image.name}`
-    }, (err, post) => {
-      res.redirect("/");
-    });
+  image.mv(path.resolve(__dirname, "public/movieImages", image.name), err => {
+    Movies.create(
+      {
+        ...req.body,
+        image: `/movieImages/${image.name}`
+      },
+      (err, post) => {
+        res.redirect("/");
+      }
+    );
   });
 });
 
@@ -193,10 +205,10 @@ app.post("/addCategory/store", (req, res) => {
 });
 
 app.post("/addCountry/store", (req, res) => {
-    Country.create(req.body, (err, post) => {
-      res.redirect("/");
-    });
+  Country.create(req.body, (err, post) => {
+    res.redirect("/");
   });
+});
 
 const port = 5000;
 

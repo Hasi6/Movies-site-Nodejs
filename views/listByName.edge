@@ -88,7 +88,7 @@
 												</li>
 											@else
 												<li class="page-item">
-													<a href="/list/1" class="page-link">First Page</a>
+													<a href="/list/a/1" class="page-link">First Page</a>
 												</li>	
 											@endif
 											
@@ -105,7 +105,7 @@
 													</li>
 												@else
 													<li class="page-item">
-														<a href="/list/{{pag}}" class="page-link">{{ pag }}</a>
+														<a href="/list/{{letter}}/{{pag}}" class="page-link">{{ pag }}</a>
 													</li>	
 												@endif
 												@endeach
@@ -120,7 +120,7 @@
 													</li>
 												@else
 													<li class="page-item">
-														<a href="/list/{{pag}}" class="page-link">{{ pag }}</a>
+														<a href="/list/{{letter}}/{{pag}}" class="page-link">{{ pag }}</a>
 													</li>	
 												@endif
 												@endeach
@@ -135,7 +135,7 @@
 													</li>
 												@else
 													<li class="page-item">
-														<a href="/list/{{pag}}" class="page-link">{{ pag }}</a>
+														<a href="/list/{{letter}}/{{pag}}" class="page-link">{{ pag }}</a>
 													</li>	
 												@endif
 												@endeach
@@ -147,7 +147,7 @@
 												</li>
 											@else
 												<li class="page-item">
-													<a href="/list/{{pages}}" class="page-link">Last Page</a>
+													<a href="/list/{{letter}}/{{pages}}" class="page-link">Last Page</a>
 												</li>	
 											@endif	
 										</ul>
