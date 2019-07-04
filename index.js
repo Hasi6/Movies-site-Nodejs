@@ -127,11 +127,13 @@ app.get("/list/:page", async (req, res) => {
 
 // get movies sort by name
 app.get("/list/:letter/:page", async (req, res) => {
-  let perPage = 1;
+  let perPage = 3;
   let page = req.params.page || 1;
-  let letter = req.params.letter || "a";
+  let letter = req.params.letter;
 
-  let allMoviesStartedWithLetter = await Movies.find({ name : { $regex: '^'+letter, $options: 'i'}}).countDocuments();
+  let allMoviesStartedWithLetter = await Movies.find({
+    name: { $regex: new RegExp(`^${letter}`, 'i') }
+  }).countDocuments();
   console.log(allMoviesStartedWithLetter);
 
   let lastPage = allMoviesStartedWithLetter / perPage;
@@ -140,7 +142,9 @@ app.get("/list/:letter/:page", async (req, res) => {
     res.send("Sorry This page is not available");
   }
 
-  let allMovies = await Movies.find({ name : { $regex: '^'+letter, $options: 'i'}})
+  let allMovies = await Movies.find({
+    name: { $regex: new RegExp(letter) }
+  })
     .skip(perPage * page - perPage)
     .limit(perPage)
     .sort({ createDate: 1 });
@@ -152,6 +156,23 @@ app.get("/list/:letter/:page", async (req, res) => {
     letter: letter
   });
 });
+
+// app.get("/search", async (req, res) => {
+//   let q = req.query.q;
+
+//   let searchMovies = await Movies.find({
+//     name: {
+//       $regex: new RegExp(q)
+//     }
+//   },
+//   {
+//     _id:0,
+//     _v:0
+//   }, (err,data)=>{
+//     res.json(data)
+//   }
+//   ).limit(10);
+// });
 
 app.get("/news", (req, res) => {
   res.render("news");
@@ -199,6 +220,39 @@ app.post("/addMovies/store", (req, res) => {
 });
 
 app.post("/addCategory/store", (req, res) => {
+  Category.create(req.body, (err, post) => {
+    res.redirect("/");
+  });
+});
+
+app.post("/searchProcess", async (req, res) => {
+  const keyWord = req.body.search;
+
+  console.log(keyWord);
+
+  const searchMovies = await Movies.find({
+    name: { $regex: new RegExp(keyWord, "i") }
+  })
+
+  const countMoviesSearch = await Movies.find({
+    name: { $regex: new RegExp(keyWord, "i") }
+  }).countDocuments();
+
+  console.log(countMoviesSearch);
+
+  // console.log(keyWord);
+    res.render("searchResults",{
+      searchMovies: searchMovies,
+      countMoviesSearch: countMoviesSearch
+    });
+  });
+
+app.get("/searchResults/:keyWord", async (req,res)=>{
+  const searchkey = await req.params.keyWord;
+  console.log(searhkey);
+})
+
+app.post("/search", (req, res) => {
   Category.create(req.body, (err, post) => {
     res.redirect("/");
   });
