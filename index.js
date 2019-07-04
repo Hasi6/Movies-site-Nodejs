@@ -102,6 +102,8 @@ app.get("/addCountry", (req, res) => {
 });
 
 // get All movies
+
+
 app.get("/list/:page", async (req, res) => {
   let perPage = 1;
   let page = req.params.page || 1;
@@ -225,31 +227,45 @@ app.post("/addCategory/store", (req, res) => {
   });
 });
 
-app.post("/searchProcess", async (req, res) => {
+app.post("/searchProcess/:page", async (req, res) => {
   const keyWord = req.body.search;
+
+  let perPage = 1;
+  let page = req.params.page || 1;
 
   console.log(keyWord);
 
+
   const searchMovies = await Movies.find({
-    name: { $regex: new RegExp(keyWord, "i") }
+    description: { $regex: new RegExp(keyWord, "i") }
   })
+  .skip(perPage * page - perPage)
+  .limit(perPage)
+  .sort({ createDate: 1 });
 
   const countMoviesSearch = await Movies.find({
-    name: { $regex: new RegExp(keyWord, "i") }
+    description: { $regex: new RegExp(keyWord, "i") }
   }).countDocuments();
+
+  let lastPage = countMoviesSearch / perPage;
 
   console.log(countMoviesSearch);
 
   // console.log(keyWord);
     res.render("searchResults",{
       searchMovies: searchMovies,
-      countMoviesSearch: countMoviesSearch
+      countMoviesSearch: countMoviesSearch,
+      page:page,
+      pages: Math.ceil(lastPage),
+      prePage:perPage
     });
   });
 
-app.get("/searchResults/:keyWord", async (req,res)=>{
+app.get("/searchResults/:keyWord/:page", async (req,res)=>{
   const searchkey = await req.params.keyWord;
-  console.log(searhkey);
+  const page = await req.params.page;
+  console.log(searchkey);
+  console.log(page);
 })
 
 app.post("/search", (req, res) => {

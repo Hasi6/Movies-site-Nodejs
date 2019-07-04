@@ -64,7 +64,7 @@
 											@each(searchMovie in searchMovies)
 										  <tr>
 											<td>1</td>
-										  <td class="w3-list-img"><a href="single/{{searchMovie._id}}"><img src="{{searchMovie.image}}" alt="" class="img-responsive" /> <span>{{searchMovie.name}}</span></a></td>
+										  <td class="w3-list-img"><a href="single/{{searchMovie._id}}"><img src="{{searchMovie.image}}" alt="" class="img-responsive" width="100px" height="50px" /> <span>{{searchMovie.name}}</span></a></td>
 										  <td>{{searchMovie.year.getFullYear()}}</td>
 											<td>HD</td>
 										  <td class="w3-list-info"><a href="{{searchMovie.country}}">{{searchMovie.country}}</a></td>
@@ -78,7 +78,81 @@
 							</div>
 
 							<div class="row text-center">
-								
+	@if(page)
+		<nav class="mx-auto">
+			<ul class="pagination">
+				{{--  First   --}}
+				@if(page == 1)
+					<li class="page-item disabled">
+						<a href="" class="page-link">First Page</a>
+					</li>
+				@else
+					<li class="page-item">
+						<a href="/list/a/1" class="page-link">First Page</a>
+					</li>	
+				@endif
+				
+				{{--  All Pages  --}}
+				@set(i, '(Number(page) > 5 ? Number(page) - 4 : 1)')
+
+					@if(page == 1)
+
+					@each(pag in range(page, ((page)%10)+6))
+					
+					@if(page == pag)
+						<li class="page-item disabled">
+							<a href="" class="page-link">{{ pag }}</a>
+						</li>
+					@else
+						<li class="page-item">
+							<a href="{{pag}}" class="page-link">{{ pag }}</a>
+						</li>	
+					@endif
+					@endeach
+					
+					@elseif(page <= 5)
+
+					@each(pag in range(page-1, ((page)%10)+6))
+					
+					@if(page == pag)
+						<li class="page-item disabled">
+							<a href="" class="page-link">{{ pag }}</a>
+						</li>
+					@else
+						<li class="page-item">
+							<a href="{{pag}}" class="page-link">{{ pag }}</a>
+						</li>	
+					@endif
+					@endeach
+
+					@else
+
+					@each(pag in range(page - 5, ((page)%10)+6))
+					
+					@if(page == pag)
+						<li class="page-item disabled">
+							<a href="" class="page-link">{{ pag }}</a>
+						</li>
+					@else
+						<li class="page-item">
+							<a href="{{pag}}" class="page-link">{{ pag }}</a>
+						</li>	
+					@endif
+					@endeach
+					@endif
+				{{--  Last Page  --}}
+				@if(page == pages)
+					<li class="page-item disabled">
+						<a href="" class="page-link">Last Page</a>
+					</li>
+				@else
+					<li class="page-item">
+						<a href="{{pages}}" class="page-link">Last Page</a>
+					</li>	
+				@endif	
+			</ul>
+		</nav>
+	@endif
 							</div>
 									</tbody>
 									</table>
@@ -89,5 +163,8 @@
 			</div>
 	</div>
 <!-- //faq-banner -->
-
 @endsection
+
+<div class="row text-center">
+	
+</div>
