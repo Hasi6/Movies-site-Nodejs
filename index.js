@@ -68,10 +68,8 @@ app.get("/", async (req, res) => {
 //   movies: movies
 // });
 // });
-
-app.get("/comedy", (req, res) => {
-  res.render("comedy");
-});
+const comedy = require('./comedy');
+app.get("/comedy", comedy);
 
 app.get("/contact", (req, res) => {
   res.render("contact");
@@ -87,12 +85,16 @@ app.get("/horror", (req, res) => {
   res.render("horror");
 });
 app.get("/addMovies", async (req, res) => {
+  try{
   const countries = await Country.find().sort({ createDate: -1 });
   const categories = await Category.find().sort({ createDate: -1 });
   res.render("addMovies", {
     countries: countries,
     categories: categories
   });
+}catch(err){
+  console.error(err.message);
+}
 });
 app.get("/addCategory", (req, res) => {
   res.render("addCategory");
@@ -105,6 +107,7 @@ app.get("/addCountry", (req, res) => {
 
 
 app.get("/list/:page", async (req, res) => {
+  try{
   let perPage = 1;
   let page = req.params.page || 1;
 
@@ -125,10 +128,14 @@ app.get("/list/:page", async (req, res) => {
     pages: Math.ceil(lastPage),
     perPage: perPage
   });
+}catch(err){
+  console.error(err.message);
+}
 });
 
 // get movies sort by name
 app.get("/list/:letter/:page", async (req, res) => {
+  try{
   let perPage = 3;
   let page = req.params.page || 1;
   let letter = req.params.letter;
@@ -157,6 +164,9 @@ app.get("/list/:letter/:page", async (req, res) => {
     perPage: perPage,
     letter: letter
   });
+}catch(err){
+  console.error(err.message);
+}
 });
 
 // app.get("/search", async (req, res) => {
@@ -190,14 +200,22 @@ app.get("/short-codes", (req, res) => {
 });
 
 app.get("/single/:id", async (req, res) => {
+  try{
   const singleMovie = await Movies.findById(req.params.id);
   res.render("single", {
     singleMovie: singleMovie
   });
+}catch(err){
+  console.error(err.message);
+}
 });
 
 app.get("/single", async (req, res) => {
+  try{
   res.render("single");
+  }catch(err){
+    console.error(err.message);
+  }
 });
 
 app.get("*", (req, res) => {
@@ -228,6 +246,7 @@ app.post("/addCategory/store", (req, res) => {
 });
 
 app.post("/searchProcess/:page", async (req, res) => {
+  try{
   const keyWord = req.body.search;
 
   let perPage = 1;
@@ -259,13 +278,20 @@ app.post("/searchProcess/:page", async (req, res) => {
       pages: Math.ceil(lastPage),
       prePage:perPage
     });
+  }catch(err){
+    console.error(err.message);
+  }
   });
 
 app.get("/searchResults/:keyWord/:page", async (req,res)=>{
+  try{
   const searchkey = await req.params.keyWord;
   const page = await req.params.page;
   console.log(searchkey);
   console.log(page);
+  }catch(err){
+    console.error(err.message);
+  }
 })
 
 app.post("/search", (req, res) => {
