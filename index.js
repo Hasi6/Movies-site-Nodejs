@@ -5,6 +5,7 @@ const expressEdge = require("express-edge");
 const bodyParser = require("body-parser");
 const fileUpload = require("express-fileupload");
 const nodemailer = require("nodemailer");
+const config = require("config");
 
 const Movies = require("./database/models/Movies");
 const Category = require("./database/models/Category");
@@ -240,14 +241,54 @@ app.post("/addCategory/store", (req, res) => {
   });
 });
 
-app.post("/searchProcess/:page", async (req, res) => {
+app.post("/searchProcess", async (req, res) => {
   try {
     const keyWord = req.body.search;
 
-    let perPage = 1;
-    let page = req.params.page || 1;
-
     console.log(keyWord);
+
+    const countMoviesSearch = await Movies.find({
+      description: { $regex: new RegExp(keyWord, "i") }
+    }).countDocuments();
+
+    let perPage = 10;
+    let page = countMoviesSearch / perPage;
+
+    const searchMovies = await Movies.find({
+      description: { $regex: new RegExp(keyWord, "i") }
+    })
+      .skip((Math.abs(perPage * page - perPage)))
+      .limit(perPage)
+      .sort({ createDate: 1 });
+
+    
+
+    let lastPage = countMoviesSearch / perPage;
+
+    console.log(countMoviesSearch);
+
+    // console.log(keyWord);
+    res.render("searchResults", {
+      searchMovies: searchMovies,
+      countMoviesSearch: countMoviesSearch,
+      page: page,
+      pages: Math.ceil(lastPage),
+      prePage: perPage
+    });
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+
+app.get("searchProcess/:page", async (req, res) => {
+  try {
+    const countMoviesSearch = await Movies.find({
+      description: { $regex: new RegExp(keyWord, "i") }
+    }).countDocuments();
+
+    let perPage = 1;
+    let page = req.params.page;
 
     const searchMovies = await Movies.find({
       description: { $regex: new RegExp(keyWord, "i") }
@@ -255,10 +296,6 @@ app.post("/searchProcess/:page", async (req, res) => {
       .skip(perPage * page - perPage)
       .limit(perPage)
       .sort({ createDate: 1 });
-
-    const countMoviesSearch = await Movies.find({
-      description: { $regex: new RegExp(keyWord, "i") }
-    }).countDocuments();
 
     let lastPage = countMoviesSearch / perPage;
 
@@ -337,16 +374,16 @@ app.post("/send", async (req, res) => {
   }
 });
 
-app.get("/searchResults/:keyWord/:page", async (req, res) => {
-  try {
-    const searchkey = await req.params.keyWord;
-    const page = await req.params.page;
-    console.log(searchkey);
-    console.log(page);
-  } catch (err) {
-    console.error(err.message);
-  }
-});
+// app.get("/searchResults/:keyWord/:page", async (req, res) => {
+//   try {
+//     const searchkey = await req.params.keyWord;
+//     const page = await req.params.page;
+//     console.log(searchkey);
+//     console.log(page);
+//   } catch (err) {
+//     console.error(err.message);
+//   }
+// });
 
 app.post("/search", (req, res) => {
   Category.create(req.body, (err, post) => {

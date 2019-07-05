@@ -32,20 +32,12 @@
 
     <div class="form-group" style="width: 60%; margin: 0 auto">
     Country
-    <select name="country" id="" class="form-control">
-       @each(country in countries)
-            <option value="{{country.name}}">{{country.name}}</option>
-       @endeach
-    </select>
+    <input type="text" class="form-control" required name="country">
     </div>
         
     <div class="form-group" style="width: 60%; margin: 0 auto">
     Category
-    <select name="category" id="" class="form-control">
-        @each(category in categories)
-            <option value="{{category.name}}">{{category.name}}</option>
-        @endeach
-         </select>
+    <input type="text" class="form-control" required name="category">
     </div>
 
     <div class="form-group" style="width: 60%; margin: 0 auto">
