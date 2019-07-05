@@ -101,6 +101,34 @@
 							@endeach
 						</div>
 					</div>
+
+					<div role="tabpanel" class="tab-pane fade" id="profile" aria-labelledby="profile-tab">
+							@each(topViewedMovie in topViewedMovies)
+							<div class="col-md-2 w3l-movie-gride-agile">
+							<a href="/update/{{topViewedMovie.id}}" class="hvr-shutter-out-horizontal"><img src="{{topViewedMovie.largeimage}}" title="album-name" class="img-responsive" alt=" " />
+									<div class="w3l-action-icon"><i class="fa fa-play-circle" aria-hidden="true"></i></div>
+								</a>
+								<div class="mid-1 agileits_w3layouts_mid_1_home">
+									<div class="w3l-movie-text">
+										<h6><a href="/update/{{topViewedMovie.id}}">{{topViewedMovie.name}}</a></h6>
+									<h6 >All Views: <span class="badge-success">{{topViewedMovie.views}}</span></h6>							
+									</div>
+									<div class="mid-2 agile_mid_2_home">
+										<p>{{topViewedMovie.year.getFullYear()}}</p>
+										<div class="block-stars">
+											<Strong>Idmb Ratings: {{topViewedMovie.idbmRating}}</Strong>
+										</div>
+										<div class="clearfix"></div>
+									</div>
+								</div>
+								<div class="ribben">
+									<p>NEW</p>
+								</div>
+							</div>
+							@endeach
+							<div class="clearfix"> </div>
+						</div>
+
 					<div role="tabpanel" class="tab-pane fade" id="rating" aria-labelledby="rating-tab">
 						@each(RatingMovie in RatingMovies)
 						<div class="col-md-2 w3l-movie-gride-agile">

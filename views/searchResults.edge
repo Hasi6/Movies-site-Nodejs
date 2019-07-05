@@ -19,118 +19,42 @@
 									<div class="w3ls-news-result">
 									<h4>Search Results : <span>{{countMoviesSearch || 'No Results Found'}}</span></h4>
 									</div>
-									<table id="table-breakpoint">
-										@if(countMoviesSearch > 0)
-										<thead>
-										  <tr>
-											<th>No.</th>
-											<th>Movie Name</th>
-											<th>Year</th>
-											<th>Status</th>
-											<th>Country</th>
-											<th>Genre</th>
-											<th>Rating</th>
-										  </tr>
-										</thead>
-										@endif
-										<tbody>
+									<div class="row text-center">
 											@each(searchMovie in searchMovies)
-										  <tr>
-											<td>1</td>
-										  <td class="w3-list-img"><a href="single/{{searchMovie._id}}"><img src="{{searchMovie.image}}" alt="" class="img-responsive" width="100px" height="50px" /> <span>{{searchMovie.name}}</span></a></td>
-										  <td>{{searchMovie.year.getFullYear()}}</td>
-											<td>HD</td>
-										  <td class="w3-list-info"><a href="{{searchMovie.country}}">{{searchMovie.country}}</a></td>
-										  <td class="w3-list-info"><a href="{{searchMovie.category}}">{{searchMovie.category}}</a></td>
-                                          <td>{{searchMovie.idbmRating}}</td>
-										  </tr>
-										  @endeach
-										</tbody>
-									</table>
+												<div class="col-md-2 w3l-movie-gride-agile">
+												<a href="/update/{{searchMovie.id}}" class="hvr-shutter-out-horizontal"><img src="{{searchMovie.smallimage}}" title="album-name" alt=" " />
+														<div class="w3l-action-icon"><i class="fa fa-play-circle" aria-hidden="true"></i></div>
+												   </a>
+													 <div class="mid-1">
+													   <div class="w3l-movie-text">
+														   <h6><a href="/update/{{searchMovie.id}}">{{searchMovie.name}}</a></h6>							
+													   </div>
+													   <div class="mid-2">
+													   
+														   <p>{{searchMovie.year.getFullYear()}}</p>
+														   <div class="block-stars">
+															   <ul class="w3l-ratings">
+																		<li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+																		<li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+																		<li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+																		<li><a href="#"><i class="fa fa-star-half-o" aria-hidden="true"></i></a></li>
+																		<li><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></li>
+															   </ul>
+														   </div>
+														   <div class="clearfix"></div>
+													   </div>
+														   
+												   </div>
+													<div class="ribben two">
+													   <p>NEW</p>
+												   </div>	
+												   </div>
+										@endeach
+										</div>
 								</div>
 							</div>
 
-							<div class="row text-center">
-@if(countMoviesSearch > 0)
-	@if(page)
-		<nav class="mx-auto">
-			<ul class="pagination">
-				{{--  First   --}}
-				@if(page == 1)
-					<li class="page-item disabled">
-						<a href="" class="page-link">First Page</a>
-					</li>
-				@else
-					<li class="page-item">
-						<a href="/searchProcess" class="page-link">First Page</a>
-					</li>	
-				@endif
-				
-				{{--  All Pages  --}}
-				@set(i, '(Number(page) > 5 ? Number(page) - 4 : 1)')
-
-					@if(page == 1)
-
-					@each(pag in range(page, ((page)%10)+6))
-					
-					@if(page == pag)
-						<li class="page-item disabled">
-							<a href="" class="page-link">{{ pag }}</a>
-						</li>
-					@else
-						<li class="page-item">
-							<a href="/searchProcess/{{pag}}" class="page-link">{{ pag }}</a>
-						</li>	
-					@endif
-					@endeach
-					
-					@elseif(page <= 5)
-
-					@each(pag in range(page-1, ((page)%10)+6))
-					
-					@if(page == pag)
-						<li class="page-item disabled">
-							<a href="" class="page-link">{{ pag }}</a>
-						</li>
-					@else
-						<li class="page-item">
-							<a href="/searchProcess/{{pag}}" class="page-link">{{ pag }}</a>
-						</li>	
-					@endif
-					@endeach
-
-					@else
-
-					@each(pag in range(page - 5, ((page)%10)+6))
-					
-					@if(page == pag)
-						<li class="page-item disabled">
-							<a href="" class="page-link">{{ pag }}</a>
-						</li>
-					@else
-						<li class="page-item">
-							<a href="/searchProcess/{{pag}}" class="page-link">{{ pag }}</a>
-						</li>	
-					@endif
-					@endeach
-					@endif
-				{{--  Last Page  --}}
-				@if(page == pages)
-					<li class="page-item disabled">
-						<a href="" class="page-link">Last Page</a>
-					</li>
-				@else
-					<li class="page-item">
-						<a href="/searchProcess/{{pages}}" class="page-link">Last Page</a>
-					</li>	
-				@endif	
-			</ul>
-		</nav>
-	@endif
-	@endif
-							</div>
-									</tbody>
-									</table>
+							
 								</div>
 							</div>
 						</div>
