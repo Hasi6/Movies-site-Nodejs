@@ -6,7 +6,7 @@
 	<div id="slidey" style="display:none;">
 		<ul>
 			@each(MoviesHeader in MoviesHeaders)
-				<li><img src="{{MoviesHeader.image}}" class="img-responsive" alt=""><p class='title'>{{MoviesHeader.name}}</p><p class='description'>{{MoviesHeader.description}}</p></li>
+				<li><img src="{{MoviesHeader.largeimage}}" class="img-responsive" alt=""><p class='title'>{{MoviesHeader.name}}</p><p class='description'>{{MoviesHeader.description}}</p></li>
 			@endeach
 		</ul>   	
     </div>
@@ -31,7 +31,7 @@
 						@each(MoviesSlides in  MoviesSlide)
 						<div class="item">
 							<div class="w3l-movie-gride-agile w3l-movie-gride-agile1">
-								<a href="/single/{{MoviesSlides._id}}" class="hvr-shutter-out-horizontal"><img src="{{MoviesSlides.image}}" title="album-name" class="img-responsive" alt=" " />
+								<a href="/single/{{MoviesSlides._id}}" class="hvr-shutter-out-horizontal"><img src="{{MoviesSlides.smallimage}}" title="album-name" class="img-responsive" alt=" " />
 									<div class="w3l-action-icon"><i class="fa fa-play-circle" aria-hidden="true"></i></div>
 								</a>
 								<div class="mid-1 agileits_w3layouts_mid_1_home">
@@ -80,7 +80,7 @@
 						<div class="w3_agile_featured_movies">
 							@each(movie in movies)
 							<div class="col-md-2 w3l-movie-gride-agile">
-							<a href="single/{{movie._id}}" class="hvr-shutter-out-horizontal"><img src="{{movie.image}}" title="album-name" class="img-responsive" alt=" " />
+							<a href="single/{{movie._id}}" class="hvr-shutter-out-horizontal"><img src="{{movie.smallimage}}" title="album-name" class="img-responsive" alt=" " />
 									<div class="w3l-action-icon"><i class="fa fa-play-circle" aria-hidden="true"></i></div>
 								</a>
 								<div class="mid-1 agileits_w3layouts_mid_1_home">
@@ -104,7 +104,7 @@
 					<div role="tabpanel" class="tab-pane fade" id="rating" aria-labelledby="rating-tab">
 						@each(RatingMovie in RatingMovies)
 						<div class="col-md-2 w3l-movie-gride-agile">
-						<a href="single.html" class="hvr-shutter-out-horizontal"><img src="{{RatingMovie.image}}" title="album-name" class="img-responsive" alt=" " />
+						<a href="single.html" class="hvr-shutter-out-horizontal"><img src="{{RatingMovie.largeimage}}" title="album-name" class="img-responsive" alt=" " />
 								<div class="w3l-action-icon"><i class="fa fa-play-circle" aria-hidden="true"></i></div>
 							</a>
 							<div class="mid-1 agileits_w3layouts_mid_1_home">
@@ -276,7 +276,7 @@
 							<div class="agile_tv_series_grid">
 								<div class="col-md-6 agile_tv_series_grid_left">
 									<div class="w3ls_market_video_grid1">
-									<img src="{{popularMovie.image}}" alt=" " class="img-responsive" />
+									<img src="{{popularMovie.smallimage}}" alt=" " class="img-responsive" />
 										<a class="w3_play_icon1" href="#small-dialog1">
 											<span class="glyphicon glyphicon-play-circle" aria-hidden="true"></span>
 										</a>
@@ -303,7 +303,7 @@
 								@each(popularActionMovie in popularActionMovies)
 								<div class="agileinfo_flexislider_grids">
 									<div class="col-md-2 w3l-movie-gride-agile">
-										<a href="single.html" class="hvr-shutter-out-horizontal"><img src="{{popularActionMovie.image}}" title="album-name" class="img-responsive" alt=" " />
+										<a href="single.html" class="hvr-shutter-out-horizontal"><img src="{{popularActionMovie.largeimage}}" title="album-name" class="img-responsive" alt=" " />
 											<div class="w3l-action-icon"><i class="fa fa-play-circle" aria-hidden="true"></i></div>
 										</a>
 										<div class="mid-1 agileits_w3layouts_mid_1_home">
@@ -323,6 +323,7 @@
 										</div>
 									</div>
 								@endeach
+
 									<div class="clearfix"> </div>
 								</div>
 							</div>

@@ -128,6 +128,15 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 					}
 				</script>
 			</div>
+			<div class="w3l_sign_in_register">
+				<ul>
+					<li><i class="fa fa-phone" aria-hidden="true"></i> (+000) 123 345 653</li>
+					<li><a href="#myModel" data-toggle="modal" data-target="#myModal">Login</a></li>
+					<li><a href="addMovies" data-toggle="modal" data-target="#myModal1">Add Movies</a></li>
+					<li><a href="addCountry" data-toggle="modal" data-target="#myModal2">Add Movies Coountry</a></li>
+					<li><a href="addCategory" data-toggle="modal" data-target="#myModal3">Add Movies Category</a></li>
+				</ul>
+			</div>
 			<div class="clearfix"> </div>
 		</div>
 	</div>
@@ -172,18 +181,17 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 								  <div class="form">
 									<h3>Login to your account</h3>
 									<form action="#" method="post">
-									  <input type="text" name="Username" placeholder="Username" required="">
-									  <input type="password" name="Password" placeholder="Password" required="">
+									  <input type="text" name="username" placeholder="Username" required="">
+									  <input type="password" name="password" placeholder="Password" required="">
 									  <input type="submit" value="Login">
 									</form>
 								  </div>
 								  <div class="form">
 									<h3>Create an account</h3>
-									<form action="#" method="post">
-									  <input type="text" name="Username" placeholder="Username" required="">
-									  <input type="password" name="Password" placeholder="Password" required="">
-									  <input type="email" name="Email" placeholder="Email Address" required="">
-									  <input type="text" name="Phone" placeholder="Phone Number" required="">
+									<form action="/users/register" method="post">
+									  <input type="text" name="username" placeholder="Username" required="">
+									  <input type="password" name="password" placeholder="Password" required="">
+									  <input type="email" name="email" placeholder="Email Address" required="">
 									  <input type="submit" value="Register">
 									</form>
 								  </div>
@@ -226,80 +234,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 					<nav>
 						<ul class="nav navbar-nav">
 							<li><a href="/">Home</a></li>
-							<li class="dropdown">
-								<a href="#" class="dropdown-toggle" data-toggle="dropdown">Genres <b class="caret"></b></a>
-								<ul class="dropdown-menu multi-column columns-3">
-									<li>
-									<div class="col-sm-4">
-										<ul class="multi-column-dropdown">
-											<li><a href="genres">Action</a></li>
-											<li><a href="genres">Biography</a></li>
-											<li><a href="genres">Crime</a></li>
-											<li><a href="genres">Family</a></li>
-											<li><a href="horror">Horror</a></li>
-											<li><a href="genres">Romance</a></li>
-											<li><a href="genres">Sports</a></li>
-											<li><a href="genres">War</a></li>
-										</ul>
-									</div>
-									<div class="col-sm-4">
-										<ul class="multi-column-dropdown">
-											<li><a href="genres">Adventure</a></li>
-											<li><a href="comedy">Comedy</a></li>
-											<li><a href="genres">Documentary</a></li>
-											<li><a href="genres">Fantasy</a></li>
-											<li><a href="genres">Thriller</a></li>
-										</ul>
-									</div>
-									<div class="col-sm-4">
-										<ul class="multi-column-dropdown">
-											<li><a href="genres">Animation</a></li>
-											<li><a href="genres">Costume</a></li>
-											<li><a href="genres">Drama</a></li>
-											<li><a href="genres">History</a></li>
-											<li><a href="genres">Musical</a></li>
-											<li><a href="genres">Psychological</a></li>
-										</ul>
-									</div>
-									<div class="clearfix"></div>
-									</li>
-								</ul>
-							</li>
-							<li><a href="series.html">tv - series</a></li>
+							<li><a href="allMovies">tv - series</a></li>
 							<li><a href="news">news</a></li>
-							<li class="dropdown">
-								<a href="#" class="dropdown-toggle" data-toggle="dropdown">Country <b class="caret"></b></a>
-								<ul class="dropdown-menu multi-column columns-3">
-									<li>
-										<div class="col-sm-4">
-											<ul class="multi-column-dropdown">
-												<li><a href="genres">Asias</a></li>
-												<li><a href="genres">France</a></li>
-												<li><a href="genres">Taiwan</a></li>
-												<li><a href="genres">United States</a></li>
-											</ul>
-										</div>
-										<div class="col-sm-4">
-											<ul class="multi-column-dropdown">
-												<li><a href="genres">China</a></li>
-												<li><a href="genres">HongCong</a></li>
-												<li><a href="genres">Japan</a></li>
-												<li><a href="genres">Thailand</a></li>
-											</ul>
-										</div>
-										<div class="col-sm-4">
-											<ul class="multi-column-dropdown">
-												<li><a href="genres">Euro</a></li>
-												<li><a href="genres">India</a></li>
-												<li><a href="genres">Korea</a></li>
-												<li><a href="genres">United Kingdom</a></li>
-											</ul>
-										</div>
-										<div class="clearfix"></div>
-									</li>
-								</ul>
-							</li>
-							<li><a href="short-codes">Short Codes</a></li>
 							<li><a href="/list/1">A - z list</a></li>
 						</ul>
 					</nav>
@@ -309,73 +245,10 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 	</div>
 <!-- //nav -->
 
-<div class="general_social_icons">
-	<nav class="social">
-		<ul>
-			<li class="w3_twitter"><a href="#">Twitter <i class="fa fa-twitter"></i></a></li>
-			<li class="w3_facebook"><a href="#">Facebook <i class="fa fa-facebook"></i></a></li>
-			<li class="w3_dribbble"><a href="#">Dribbble <i class="fa fa-dribbble"></i></a></li>
-			<li class="w3_g_plus"><a href="#">Google+ <i class="fa fa-google-plus"></i></a></li>				  
-		</ul>
-  </nav>
-</div>
-
 
 @!section('content')
 
 
-<!-- footer -->
-<div class="footer">
-    <div class="container">
-        <div class="w3ls_footer_grid">
-            <div class="col-md-6 w3ls_footer_grid_left">
-                <div class="w3ls_footer_grid_left1">
-                    <h2>Subscribe to us</h2>
-                    <div class="w3ls_footer_grid_left1_pos">
-                        <form action="#" method="post">
-                            <input type="email" name="email" placeholder="Your email..." required="">
-                            <input type="submit" value="Send">
-                        </form>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 w3ls_footer_grid_right">
-                <a href="index.html"><h2>One<span>Movies</span></h2></a>
-            </div>
-            <div class="clearfix"> </div>
-        </div>
-        <div class="col-md-5 w3ls_footer_grid1_left">
-            <p>&copy; 2016 One Movies. All rights reserved | Design by <a href="http://w3layouts.com/">W3layouts</a></p>
-        </div>
-        <div class="col-md-7 w3ls_footer_grid1_right">
-            <ul>
-                <li>
-                    <a href="genres">Movies</a>
-                </li>
-                <li>
-                    <a href="faq">FAQ</a>
-                </li>
-                <li>
-                    <a href="horror">Action</a>
-                </li>
-                <li>
-                    <a href="genres">Adventure</a>
-                </li>
-                <li>
-                    <a href="comedy">Comedy</a>
-                </li>
-                <li>
-                    <a href="icons">Icons</a>
-                </li>
-                <li>
-                    <a href="contact">Contact Us</a>
-                </li>
-            </ul>
-        </div>
-        <div class="clearfix"> </div>
-    </div>
-</div>
-<!-- //footer -->
 <!-- Bootstrap Core JavaScript -->
 <script src="/js/bootstrap.min.js"></script>
 <script>

@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const paginate = require("mongoose-paginate");
 
 const MoviesSchema = new mongoose.Schema({
     name:{
@@ -25,7 +24,8 @@ const MoviesSchema = new mongoose.Schema({
     idbmRating: String,
     country: String,
     category: String,
-    image: String,
+    smallimage: String,
+    largeimage: String,
     createdDate:{
         type: Date,
         default: new Date()
@@ -33,5 +33,4 @@ const MoviesSchema = new mongoose.Schema({
 });
 
 const Movies = mongoose.model('Movies', MoviesSchema);
-MoviesSchema.plugin(paginate);
 module.exports = Movies;

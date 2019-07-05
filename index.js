@@ -8,6 +8,7 @@ const fileUpload = require("express-fileupload");
 const Movies = require("./database/models/Movies");
 const Category = require("./database/models/Category");
 const Country = require("./database/models/Country");
+const User = require("./database/models/User");
 
 const app = new express();
 
@@ -48,16 +49,17 @@ app.get("/", async (req, res) => {
     .limit(12)
     .sort({ idbmRating: -1 });
   const popularMovies = await Movies.find().limit(3);
-  const popularActionMovies = await Movies.find({ category: "Action" }).limit(
-    6
-  );
+  const popularActionMovies = await Movies.find({ category: { $regex: new RegExp("action", "i")  }}).limit(4);
+  const popularComedyMovies = await Movies.find({ category: { $regex: new RegExp("comedy", "i")  }}).limit(4);
+
   res.render("index", {
     movies: movies,
     MoviesSlide: MoviesSlide,
     MoviesHeaders: MoviesHeaders,
     RatingMovies: RatingMovies,
     popularMovies: popularMovies,
-    popularActionMovies: popularActionMovies
+    popularActionMovies: popularActionMovies,
+    popularComedyMovies:popularComedyMovies
   });
 });
 
@@ -68,8 +70,6 @@ app.get("/", async (req, res) => {
 //   movies: movies
 // });
 // });
-const comedy = require('./comedy');
-app.get("/comedy", comedy);
 
 app.get("/contact", (req, res) => {
   res.render("contact");
@@ -189,6 +189,9 @@ app.get("/list/:letter/:page", async (req, res) => {
 app.get("/news", (req, res) => {
   res.render("news");
 });
+app.get("/admin", (req, res) => {
+  res.render("adminarea");
+});
 app.get("/news-single", (req, res) => {
   res.render("news-single");
 });
@@ -200,8 +203,9 @@ app.get("/short-codes", (req, res) => {
 });
 
 app.get("/single/:id", async (req, res) => {
+  let id = req.params.id;
   try{
-  const singleMovie = await Movies.findById(req.params.id);
+  const singleMovie = await Movies.find({_id: id});
   res.render("single", {
     singleMovie: singleMovie
   });
@@ -224,18 +228,9 @@ app.get("*", (req, res) => {
 
 // Post requests
 app.post("/addMovies/store", (req, res) => {
-  const { image } = req.files;
 
-  image.mv(path.resolve(__dirname, "public/movieImages", image.name), err => {
-    Movies.create(
-      {
-        ...req.body,
-        image: `/movieImages/${image.name}`
-      },
-      (err, post) => {
-        res.redirect("/");
-      }
-    );
+  Movies.create(req.body, (err, post) => {
+    res.redirect("/");
   });
 });
 
@@ -282,6 +277,20 @@ app.post("/searchProcess/:page", async (req, res) => {
     console.error(err.message);
   }
   });
+
+
+  app.post('/users/register', async(req,res)=>{
+      try{
+
+        User.create(req.body, (err, user)=>{
+          res.redirect('/');
+        })
+
+      }catch(err){
+        console.error(err.message);
+      }
+  });
+
 
 app.get("/searchResults/:keyWord/:page", async (req,res)=>{
   try{
