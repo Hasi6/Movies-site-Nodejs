@@ -31,12 +31,12 @@
 						@each(MoviesSlides in  MoviesSlide)
 						<div class="item">
 							<div class="w3l-movie-gride-agile w3l-movie-gride-agile1">
-								<a href="/single/{{MoviesSlides._id}}" class="hvr-shutter-out-horizontal"><img src="{{MoviesSlides.smallimage}}" title="album-name" class="img-responsive" alt=" " />
+								<a href="/update/{{MoviesSlides._id}}" class="hvr-shutter-out-horizontal"><img src="{{MoviesSlides.smallimage}}" title="album-name" class="img-responsive" alt=" " />
 									<div class="w3l-action-icon"><i class="fa fa-play-circle" aria-hidden="true"></i></div>
 								</a>
 								<div class="mid-1 agileits_w3layouts_mid_1_home">
 									<div class="w3l-movie-text">
-									<h6><a href="single.html">{{MoviesSlides.name}}</a></h6>							
+									<h6><a href="update/{{MoviesSlides.id}}">{{MoviesSlides.name}}</a></h6>							
 									</div>
 									<div class="mid-2 agile_mid_2_home">
 										<p>{{MoviesSlides.year.getFullYear()}}</p>
@@ -80,12 +80,12 @@
 						<div class="w3_agile_featured_movies">
 							@each(movie in movies)
 							<div class="col-md-2 w3l-movie-gride-agile">
-							<a href="single/{{movie.id}}" class="hvr-shutter-out-horizontal"><img src="{{movie.smallimage}}" title="album-name" class="img-responsive" alt=" " />
+							<a href="/update/{{movie.id}}" class="hvr-shutter-out-horizontal"><img src="{{movie.smallimage}}" title="album-name" class="img-responsive" alt=" " />
 									<div class="w3l-action-icon"><i class="fa fa-play-circle" aria-hidden="true"></i></div>
 								</a>
 								<div class="mid-1 agileits_w3layouts_mid_1_home">
 									<div class="w3l-movie-text">
-									<h6><a href="single/{{movie._id}}">{{movie.name}}</a></h6>							
+									<h6><a href="/update/{{movie._id}}">{{movie.name}}</a></h6>							
 									</div>
 									<div class="mid-2 agile_mid_2_home">
 									<p class="text-center">{{movie.year.getFullYear()}}</p>
@@ -104,12 +104,12 @@
 					<div role="tabpanel" class="tab-pane fade" id="rating" aria-labelledby="rating-tab">
 						@each(RatingMovie in RatingMovies)
 						<div class="col-md-2 w3l-movie-gride-agile">
-						<a href="single.html" class="hvr-shutter-out-horizontal"><img src="{{RatingMovie.largeimage}}" title="album-name" class="img-responsive" alt=" " />
+						<a href="/update/{{RatingMovie.id}}" class="hvr-shutter-out-horizontal"><img src="{{RatingMovie.largeimage}}" title="album-name" class="img-responsive" alt=" " />
 								<div class="w3l-action-icon"><i class="fa fa-play-circle" aria-hidden="true"></i></div>
 							</a>
 							<div class="mid-1 agileits_w3layouts_mid_1_home">
 								<div class="w3l-movie-text">
-									<h6><a href="single.html">{{RatingMovie.name}}</a></h6>							
+									<h6><a href="/update/{{RatingMovie.id}}">{{RatingMovie.name}}</a></h6>							
 								</div>
 								<div class="mid-2 agile_mid_2_home">
 									<p>{{RatingMovie.year.getFullYear()}}</p>
@@ -288,8 +288,8 @@
 									<p class="fexi_header_para"><span>Date of Release<label>:</label></span> {{popularMovie.date}} </p>
 									<p class="fexi_header_para">
 										<span>Genres<label>:</label> </span>
-										<a href="genres.html">{{popularMovie.category}}</a> |  
-										<a href="genres.html">{{popularMovie.country}}</a>								
+										<a href="/update/{{popularMovie.id}}">{{popularMovie.category}}</a> |  
+										<a href="/update/{{popularMovie.id}}">{{popularMovie.country}}</a>								
 									</p>
 									<p class="fexi_header_para fexi_header_para1"><span>Star Rating<label>:</label></span>
 										<a href="#"><i class="fa fa-star" aria-hidden="true"></i></a>
@@ -303,12 +303,12 @@
 								@each(popularActionMovie in popularActionMovies)
 								<div class="agileinfo_flexislider_grids">
 									<div class="col-md-2 w3l-movie-gride-agile">
-										<a href="single.html" class="hvr-shutter-out-horizontal"><img src="{{popularActionMovie.largeimage}}" title="album-name" class="img-responsive" alt=" " />
+										<a href="/update/{{popularActionMovie.id}}" class="hvr-shutter-out-horizontal"><img src="{{popularActionMovie.largeimage}}" title="album-name" class="img-responsive" alt=" " />
 											<div class="w3l-action-icon"><i class="fa fa-play-circle" aria-hidden="true"></i></div>
 										</a>
 										<div class="mid-1 agileits_w3layouts_mid_1_home">
 											<div class="w3l-movie-text">
-												<h6><a href="single.html">{{popularActionMovie.name}}</a></h6>							
+												<h6><a href="/update/{{popularActionMovie.id}}">{{popularActionMovie.name}}</a></h6>							
 											</div>
 											<div class="mid-2 agile_mid_2_home">
 												<p>{{popularActionMovie.year.getFullYear()}}</p>

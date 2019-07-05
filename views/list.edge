@@ -19,32 +19,38 @@
 									<div class="w3ls-news-result">
 									<h4>Results Per Page: <span>{{perPage}}</span></h4>
 									</div>
-									<table id="table-breakpoint">
-										<thead>
-										  <tr>
-											<th>No.</th>
-											<th>Movie Name</th>
-											<th>Year</th>
-											<th>Status</th>
-											<th>Country</th>
-											<th>Genre</th>
-											<th>Rating</th>
-										  </tr>
-										</thead>
-										<tbody>
-											@each(movie in allMovies)
-										  <tr>
-											<td>1</td>
-										  <td class="w3-list-img"><a href="/single/{{movie._id}}"><img src="{{movie.image}}" alt="" class="img-responsive" width="100px" height="50px"/> <span>{{movie.name}}</span></a></td>
-										  <td>{{movie.year.getFullYear()}}</td>
-											<td>HD</td>
-										  <td class="w3-list-info"><a href="{{movie.country}}">{{movie.country}}</a></td>
-										  <td class="w3-list-info"><a href="{{movie.category}}">{{movie.category}}</a></td>
-										  <td>{{movie.idbmRating}}</td>
-										  </tr>
-										  @endeach
-										</tbody>
-									</table>
+									@each(movie in allMovies)
+									<div class="col-md-2 w3l-movie-gride-agile">
+											<a href="/single/{{movie.id}}" class="hvr-shutter-out-horizontal"><img src="{{movie.smallimage}}" title="album-name" alt=" " />
+											<div class="w3l-action-icon"><i class="fa fa-play-circle" aria-hidden="true"></i></div>
+									   </a>
+										 <div class="mid-1">
+										   <div class="w3l-movie-text">
+											   <h6><a href="/single/{{movie.id}}">{{movie.name}}</a></h6>							
+										   </div>
+										   <div class="mid-2">
+										   
+											   <p>{{movie.year.getFullYear()}}</p>
+											   <div class="block-stars">
+												   <ul class="w3l-ratings">
+															<li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+															<li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+															<li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+															<li><a href="#"><i class="fa fa-star-half-o" aria-hidden="true"></i></a></li>
+															<li><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></li>
+															 
+										   
+												   </ul>
+											   </div>
+											   <div class="clearfix"></div>
+										   </div>
+											   
+									   </div>
+										<div class="ribben two">
+										   <p>NEW</p>
+									   </div>	
+									   </div>
+									@endeach
 								</div>
 							</div>
 

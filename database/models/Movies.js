@@ -33,6 +33,10 @@ const MoviesSchema = new mongoose.Schema({
     createdDate:{
         type: Date,
         default: new Date()
+    },
+    views: {
+        type: Number,
+        default: 0
     }
 });
 

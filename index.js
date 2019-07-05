@@ -41,8 +41,8 @@ app.get("/", async (req, res) => {
     .limit(12)
     .sort({ createDate: -1 });
   const MoviesHeaders = await Movies.find()
-    .limit(12)
-    .sort({ createDate: -1 });
+    .limit(6)
+    .sort({ createDate: 1 });
   const RatingMovies = await Movies.find()
     .limit(12)
     .sort({ idbmRating: -1 });
@@ -54,6 +54,8 @@ app.get("/", async (req, res) => {
     category: { $regex: new RegExp("comedy", "i") }
   }).limit(4);
 
+  
+
   res.render("index", {
     movies: movies,
     MoviesSlide: MoviesSlide,
@@ -61,7 +63,7 @@ app.get("/", async (req, res) => {
     RatingMovies: RatingMovies,
     popularMovies: popularMovies,
     popularActionMovies: popularActionMovies,
-    popularComedyMovies: popularComedyMovies
+    popularComedyMovies: popularComedyMovies,
   });
 });
 
@@ -107,9 +109,24 @@ app.get("/addCountry", (req, res) => {
 
 // get All movies
 
+app.get("/update/:id", async(req,res)=>{
+  try{
+  let movieId = req.params.id;
+    const view = await Movies.findById(movieId);
+    const movieViews = view.views;
+
+    const update = await Movies.findByIdAndUpdate(movieId, {views: movieViews + 1});
+
+    res.redirect('/single/'+movieId);
+
+  }catch(err){
+    console.error(err.message);
+  }
+});
+
 app.get("/list/:page", async (req, res) => {
   try {
-    let perPage = 1;
+    let perPage = 12;
     let page = req.params.page || 1;
 
     let allMoviesCount = await Movies.countDocuments();
@@ -208,8 +225,14 @@ app.get("/single/:id", async (req, res) => {
   console.log(id);
   try {
     const singleMovie = await Movies.findById(id);
+    let n = Movies.find().countDocuments();
+    let r = Math.floor(Math.random() * n);
+    let randomMovies = await Movies.find()
+    .skip(r)
+    .limit(6);
     res.render("single", {
-      singleMovie: singleMovie
+      singleMovie: singleMovie,
+      randomMovies: randomMovies
     });
   } catch (err) {
     console.error(err.message);
@@ -257,11 +280,9 @@ app.post("/searchProcess", async (req, res) => {
     const searchMovies = await Movies.find({
       description: { $regex: new RegExp(keyWord, "i") }
     })
-      .skip((Math.abs(perPage * page - perPage)))
+      .skip(Math.abs(perPage * page - perPage))
       .limit(perPage)
       .sort({ createDate: 1 });
-
-    
 
     let lastPage = countMoviesSearch / perPage;
 
@@ -279,7 +300,6 @@ app.post("/searchProcess", async (req, res) => {
     console.error(err.message);
   }
 });
-
 
 app.get("searchProcess/:page", async (req, res) => {
   try {
@@ -346,29 +366,27 @@ app.post("/send", async (req, res) => {
 
     // create reusable transporter object using the default SMTP transport
     let transporter = nodemailer.createTransport({
-      service: 'gmail',
+      service: "gmail",
       auth: {
-        user: 'hasitha.chandula96@gmail.com', // generated ethereal user
-        pass: 'Freedom6@' // generated ethereal password
+        user: "hasitha.chandula96@gmail.com", // generated ethereal user
+        pass: "Freedom6@" // generated ethereal password
       }
     });
 
     // send mail with defined transport object
     const mailOptions = {
-      from: 'hasitha.chandula96@gmail.com', // sender address
-      to: 'hasitha.chandula@gmail.com', // list of receivers
-      subject: 'Subject of your email', // Subject line
-      html: output// plain text body
+      from: "hasitha.chandula96@gmail.com", // sender address
+      to: "hasitha.chandula@gmail.com", // list of receivers
+      subject: "Subject of your email", // Subject line
+      html: output // plain text body
     };
 
-    transporter.sendMail(mailOptions, function (err, info) {
-      if(err)
-        console.log(err)
-      else
-        console.log(info);
-   });
+    transporter.sendMail(mailOptions, function(err, info) {
+      if (err) console.log(err);
+      else console.log(info);
+    });
 
-    res.render("contact", {msg: 'Email Has Been Sent'});
+    res.render("contact", { msg: "Email Has Been Sent" });
   } catch (err) {
     console.error(err.message);
   }
