@@ -4,6 +4,7 @@ const path = require("path");
 const expressEdge = require("express-edge");
 const bodyParser = require("body-parser");
 const fileUpload = require("express-fileupload");
+const nodemailer = require("nodemailer");
 
 const Movies = require("./database/models/Movies");
 const Category = require("./database/models/Category");
@@ -15,13 +16,9 @@ const app = new express();
 app.use(express.static("public"));
 
 // connet with database
-mongoose.connect(
-  "mongodb://localhost/movies-test",
-  { useNewUrlParser: true },
-  () => {
-    console.log("Connected to the database");
-  }
-);
+const connectDb = require("./config/db");
+
+connectDb();
 
 app.use(fileUpload());
 
@@ -49,8 +46,12 @@ app.get("/", async (req, res) => {
     .limit(12)
     .sort({ idbmRating: -1 });
   const popularMovies = await Movies.find().limit(3);
-  const popularActionMovies = await Movies.find({ category: { $regex: new RegExp("action", "i")  }}).limit(4);
-  const popularComedyMovies = await Movies.find({ category: { $regex: new RegExp("comedy", "i")  }}).limit(4);
+  const popularActionMovies = await Movies.find({
+    category: { $regex: new RegExp("action", "i") }
+  }).limit(4);
+  const popularComedyMovies = await Movies.find({
+    category: { $regex: new RegExp("comedy", "i") }
+  }).limit(4);
 
   res.render("index", {
     movies: movies,
@@ -59,7 +60,7 @@ app.get("/", async (req, res) => {
     RatingMovies: RatingMovies,
     popularMovies: popularMovies,
     popularActionMovies: popularActionMovies,
-    popularComedyMovies:popularComedyMovies
+    popularComedyMovies: popularComedyMovies
   });
 });
 
@@ -85,16 +86,16 @@ app.get("/horror", (req, res) => {
   res.render("horror");
 });
 app.get("/addMovies", async (req, res) => {
-  try{
-  const countries = await Country.find().sort({ createDate: -1 });
-  const categories = await Category.find().sort({ createDate: -1 });
-  res.render("addMovies", {
-    countries: countries,
-    categories: categories
-  });
-}catch(err){
-  console.error(err.message);
-}
+  try {
+    const countries = await Country.find().sort({ createDate: -1 });
+    const categories = await Category.find().sort({ createDate: -1 });
+    res.render("addMovies", {
+      countries: countries,
+      categories: categories
+    });
+  } catch (err) {
+    console.error(err.message);
+  }
 });
 app.get("/addCategory", (req, res) => {
   res.render("addCategory");
@@ -105,68 +106,67 @@ app.get("/addCountry", (req, res) => {
 
 // get All movies
 
-
 app.get("/list/:page", async (req, res) => {
-  try{
-  let perPage = 1;
-  let page = req.params.page || 1;
+  try {
+    let perPage = 1;
+    let page = req.params.page || 1;
 
-  let allMoviesCount = await Movies.countDocuments();
-  let lastPage = allMoviesCount / perPage;
+    let allMoviesCount = await Movies.countDocuments();
+    let lastPage = allMoviesCount / perPage;
 
-  if (page < 0 || page > lastPage + 1) {
-    res.send("Sorry This page is not available");
+    if (page < 0 || page > lastPage + 1) {
+      res.send("Sorry This page is not available");
+    }
+
+    let allMovies = await Movies.find()
+      .skip(perPage * page - perPage)
+      .limit(perPage)
+      .sort({ createDate: 1 });
+    res.render("list", {
+      allMovies: allMovies,
+      page: page,
+      pages: Math.ceil(lastPage),
+      perPage: perPage
+    });
+  } catch (err) {
+    console.error(err.message);
   }
-
-  let allMovies = await Movies.find()
-    .skip(perPage * page - perPage)
-    .limit(perPage)
-    .sort({ createDate: 1 });
-  res.render("list", {
-    allMovies: allMovies,
-    page: page,
-    pages: Math.ceil(lastPage),
-    perPage: perPage
-  });
-}catch(err){
-  console.error(err.message);
-}
 });
 
 // get movies sort by name
 app.get("/list/:letter/:page", async (req, res) => {
-  try{
-  let perPage = 3;
-  let page = req.params.page || 1;
-  let letter = req.params.letter;
+  try {
+    let perPage = 3;
+    let page = req.params.page || 1;
+    let letter = req.params.letter;
 
-  let allMoviesStartedWithLetter = await Movies.find({
-    name: { $regex: new RegExp(`^${letter}`, 'i') }
-  }).countDocuments();
-  console.log(allMoviesStartedWithLetter);
+    let allMoviesStartedWithLetter = await Movies.find({
+      name: { $regex: new RegExp(`^${letter}`, "i") }
+    }).countDocuments();
+    console.log(allMoviesStartedWithLetter);
 
-  let lastPage = allMoviesStartedWithLetter / perPage;
+    let lastPage = allMoviesStartedWithLetter / perPage;
 
-  if (page < 0 || page > lastPage + 1) {
-    res.send("Sorry This page is not available");
+    if (page < 0 || page > lastPage + 1) {
+      res.send("Sorry This page is not available");
+    }
+
+    let allMovies = await Movies.find({
+      name: { $regex: new RegExp(letter) }
+    })
+      .skip(perPage * page - perPage)
+      .limit(perPage)
+      .sort({ createDate: 1 });
+    res.render("listByName", {
+      allMovies: allMovies,
+      page: page,
+      pages: Math.ceil(lastPage),
+      perPage: perPage,
+      letter: letter
+    });
+  } catch (err) {
+    console.error(err.message);
   }
-
-  let allMovies = await Movies.find({
-    name: { $regex: new RegExp(letter) }
-  })
-    .skip(perPage * page - perPage)
-    .limit(perPage)
-    .sort({ createDate: 1 });
-  res.render("listByName", {
-    allMovies: allMovies,
-    page: page,
-    pages: Math.ceil(lastPage),
-    perPage: perPage,
-    letter: letter
-  });
-}catch(err){
-  console.error(err.message);
-}
 });
 
 // app.get("/search", async (req, res) => {
@@ -204,20 +204,21 @@ app.get("/short-codes", (req, res) => {
 
 app.get("/single/:id", async (req, res) => {
   let id = req.params.id;
-  try{
-  const singleMovie = await Movies.find({_id: id});
-  res.render("single", {
-    singleMovie: singleMovie
-  });
-}catch(err){
-  console.error(err.message);
-}
+  console.log(id);
+  try {
+    const singleMovie = await Movies.findById(id);
+    res.render("single", {
+      singleMovie: singleMovie
+    });
+  } catch (err) {
+    console.error(err.message);
+  }
 });
 
 app.get("/single", async (req, res) => {
-  try{
-  res.render("single");
-  }catch(err){
+  try {
+    res.render("single");
+  } catch (err) {
     console.error(err.message);
   }
 });
@@ -228,7 +229,6 @@ app.get("*", (req, res) => {
 
 // Post requests
 app.post("/addMovies/store", (req, res) => {
-
   Movies.create(req.body, (err, post) => {
     res.redirect("/");
   });
@@ -241,67 +241,112 @@ app.post("/addCategory/store", (req, res) => {
 });
 
 app.post("/searchProcess/:page", async (req, res) => {
-  try{
-  const keyWord = req.body.search;
+  try {
+    const keyWord = req.body.search;
 
-  let perPage = 1;
-  let page = req.params.page || 1;
+    let perPage = 1;
+    let page = req.params.page || 1;
 
-  console.log(keyWord);
+    console.log(keyWord);
 
+    const searchMovies = await Movies.find({
+      description: { $regex: new RegExp(keyWord, "i") }
+    })
+      .skip(perPage * page - perPage)
+      .limit(perPage)
+      .sort({ createDate: 1 });
 
-  const searchMovies = await Movies.find({
-    description: { $regex: new RegExp(keyWord, "i") }
-  })
-  .skip(perPage * page - perPage)
-  .limit(perPage)
-  .sort({ createDate: 1 });
+    const countMoviesSearch = await Movies.find({
+      description: { $regex: new RegExp(keyWord, "i") }
+    }).countDocuments();
 
-  const countMoviesSearch = await Movies.find({
-    description: { $regex: new RegExp(keyWord, "i") }
-  }).countDocuments();
+    let lastPage = countMoviesSearch / perPage;
 
-  let lastPage = countMoviesSearch / perPage;
+    console.log(countMoviesSearch);
 
-  console.log(countMoviesSearch);
-
-  // console.log(keyWord);
-    res.render("searchResults",{
+    // console.log(keyWord);
+    res.render("searchResults", {
       searchMovies: searchMovies,
       countMoviesSearch: countMoviesSearch,
-      page:page,
+      page: page,
       pages: Math.ceil(lastPage),
-      prePage:perPage
+      prePage: perPage
     });
-  }catch(err){
+  } catch (err) {
     console.error(err.message);
   }
-  });
+});
 
+app.post("/users/register", async (req, res) => {
+  try {
+    User.create(req.body, (err, user) => {
+      res.redirect("/");
+    });
+  } catch (err) {
+    console.error(err.message);
+  }
+});
 
-  app.post('/users/register', async(req,res)=>{
-      try{
+// send Email
+app.post("/send", async (req, res) => {
+  try {
+    console.log(req.body);
+    const output = `
+    <p>You Have a new Contact request</p>
+    <h3>Contact Details</h3>
+    <ul>
+      <li>First Name : ${req.body.firstname}</li>
+      <li>Last Name : ${req.body.lastname}</li>
+      <li>Email : ${req.body.email}</li>
+      <li>Subject : ${req.body.subject}</li>
+      <li>Message : ${req.body.message}</li>
+    </ul>
 
-        User.create(req.body, (err, user)=>{
-          res.redirect('/');
-        })
+    <h3>Message</h3>
+    <p>${req.body.message}</p>
+  `;
+    let testAccount = await nodemailer.createTestAccount();
 
-      }catch(err){
-        console.error(err.message);
+    // create reusable transporter object using the default SMTP transport
+    let transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: 'hasitha.chandula96@gmail.com', // generated ethereal user
+        pass: 'Freedom6@' // generated ethereal password
       }
-  });
+    });
 
+    // send mail with defined transport object
+    const mailOptions = {
+      from: 'hasitha.chandula96@gmail.com', // sender address
+      to: 'hasitha.chandula@gmail.com', // list of receivers
+      subject: 'Subject of your email', // Subject line
+      html: output// plain text body
+    };
 
-app.get("/searchResults/:keyWord/:page", async (req,res)=>{
-  try{
-  const searchkey = await req.params.keyWord;
-  const page = await req.params.page;
-  console.log(searchkey);
-  console.log(page);
-  }catch(err){
+    transporter.sendMail(mailOptions, function (err, info) {
+      if(err)
+        console.log(err)
+      else
+        console.log(info);
+   });
+
+    res.render("contact", {msg: 'Email Has Been Sent'});
+  } catch (err) {
     console.error(err.message);
   }
-})
+});
+
+app.get("/searchResults/:keyWord/:page", async (req, res) => {
+  try {
+    const searchkey = await req.params.keyWord;
+    const page = await req.params.page;
+    console.log(searchkey);
+    console.log(page);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
 
 app.post("/search", (req, res) => {
   Category.create(req.body, (err, post) => {
