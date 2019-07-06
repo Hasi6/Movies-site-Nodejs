@@ -21,7 +21,7 @@
 									</div>
 									@each(movie in allMovies)
 									<div class="col-md-2 w3l-movie-gride-agile">
-											<a href="/single/{{movie.id}}" class="hvr-shutter-out-horizontal"><img src="{{movie.smallimage}}" title="album-name" alt=" " />
+											<a href="/single/{{movie.id}}" class="hvr-shutter-out-horizontal"><img src="{{movie.smallimage}}" class="img-responsive"itle="album-name" alt=" " />
 											<div class="w3l-action-icon"><i class="fa fa-play-circle" aria-hidden="true"></i></div>
 									   </a>
 										 <div class="mid-1">
@@ -121,7 +121,7 @@
 						@else
 							<li class="page-item">
 								<a href="/list/{{pag}}" class="page-link">{{ pag }}</a>
-							</li>	
+							</li>
 						@endif
 						@endeach
 						@endif

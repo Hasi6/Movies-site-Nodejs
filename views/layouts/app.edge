@@ -128,6 +128,15 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 					}
 				</script>
 			</div>
+			<div class="w3l_sign_in_register">
+				<ul>
+					<li><i class="fa fa-phone" aria-hidden="true"></i> (+000) 123 345 653</li>
+					<li><a href="#myModel" data-toggle="modal" data-target="#myModal">Login</a></li>
+					<li><a href="addMovies" data-toggle="modal" data-target="#myModal1">Add Movies</a></li>
+					<li><a href="addCountry" data-toggle="modal" data-target="#myModal2">Add Movies Coountry</a></li>
+					<li><a href="addCategory" data-toggle="modal" data-target="#myModal3">Add Movies Category</a></li>
+				</ul>
+			</div>
 			<div class="clearfix"> </div>
 		</div>
 	</div>
@@ -179,13 +188,12 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 								  </div>
 								  <div class="form">
 									<h3>Create an account</h3>
-									<form action="#" method="post">
-									  <input type="text" name="Username" placeholder="Username" required="">
-									  <input type="password" name="Password" placeholder="Password" required="">
-									  <input type="email" name="Email" placeholder="Email Address" required="">
-									  <input type="text" name="Phone" placeholder="Phone Number" required="">
-									  <input type="submit" value="Register">
-									</form>
+									<form action="/users/register" method="post">
+										<input type="text" name="username" placeholder="Username" required="">
+										<input type="password" name="password" placeholder="Password" required="">
+										<input type="email" name="email" placeholder="Email Address" required="">
+										<input type="submit" value="Register">
+									  </form>
 								  </div>
 								  <div class="cta"><a href="#">Forgot your password?</a></div>
 								</div>
@@ -369,6 +377,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                 </li>
                 <li>
                     <a href="contact">Contact Us</a>
+				</li>
+				<li>
+                    <a href="admin">Admin Area</a>
                 </li>
             </ul>
         </div>
