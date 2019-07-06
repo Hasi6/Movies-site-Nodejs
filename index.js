@@ -26,6 +26,7 @@ const moviesStore = require('./routes/moviesStore');
 const search = require('./routes/search');
 const userRegister = require('./routes/userRegister');
 const sendEmail = require('./routes/sendEmail');
+const searchMovie = require('./routes/searchMovie');
 
 const app = new express();
 
@@ -52,6 +53,7 @@ app.get("/update/:id", updateViews);
 app.get("/list/:page", allMoviesSort);
 app.get("/admin", adminArea);
 app.get("/single/:id", singleMovie);
+app.get("/searchResults/:searchKey/:page", searchMovie);
 app.get("*", notFound);
 
 
