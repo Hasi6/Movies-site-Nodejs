@@ -22,11 +22,11 @@ module.exports = async (req, res) => {
     var nodeoutlook = require("nodejs-nodemailer-outlook");
     nodeoutlook.sendEmail({
       auth: {
-        user: "coweb191p-014@student.nibm.lk",
-        pass: "MSIGL638rc"
+        user: "udhmovies@outlook.com",
+        pass: "moviesUdh"
       },
-      from: "coweb191p-014@student.nibm.lk",
-      to: req.body.email,
+      from: "udhmovies@outlook.com",
+      to: "hasitha.chandula@gmail.com",
       subject: "Movies Message",
       html: output,
 

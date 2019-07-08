@@ -1,0 +1,9 @@
+{{msg}}
+<div class="form">
+    <h3>Login to your account</h3>
+<form action="{{userId}}/token" method="post">
+      <input type="text" name="token" placeholder="token" required>
+      <input type="submit" value="submit">
+    </form>
+  <a href="/verify/{{userId}}">Resend The Token</a>
+  </div>

@@ -5,6 +5,7 @@ const expressEdge = require("express-edge");
 const bodyParser = require("body-parser");
 const fileUpload = require("express-fileupload");
 const config = require("config");
+const randomString = require('randomstring');
 
 const Movies = require("./database/models/Movies");
 const Category = require("./database/models/Category");
@@ -25,8 +26,11 @@ const notFound = require('./routes/notFound');
 const moviesStore = require('./routes/moviesStore');
 const search = require('./routes/search');
 const userRegister = require('./routes/userRegister');
+const userLogin = require('./routes/userLogin');
 const sendEmail = require('./routes/sendEmail');
 const searchMovie = require('./routes/searchMovie');
+const verify = require('./routes/verify');
+const getToken = require('./routes/getToken');
 
 const app = new express();
 
@@ -54,13 +58,24 @@ app.get("/list/:page", allMoviesSort);
 app.get("/admin", adminArea);
 app.get("/single/:id", singleMovie);
 app.get("/searchResults/:searchKey/:page", searchMovie);
-// app.get("*", notFound);
+app.get("/verifies/:id", verify);
+app.post("/verifies/:id/token", getToken);
+
 app.get("/verify/:userid",async (req, res) => {
   try {
-    const user = await User.findById(req.params.userid);
+    let user = await User.findById(req.params.userid);
     if(!user){
       return res.json("Not Found");
     }
+    if(user.confirmed){
+      return res.redirect('/');
+    }
+    const token = randomString.generate();
+    await User.findByIdAndUpdate(user, {userToken: token});
+
+    user = await User.findById(req.params.userid);
+
+    // oYZNs0pnmrauyd4m3Fqasapd6cLWzNeO
     const output = `
       <p>You Have a new Contact request</p>
       <h3>Contact Details</h3>
@@ -85,6 +100,7 @@ app.get("/verify/:userid",async (req, res) => {
       onError: e => console.log(e),
       onSuccess: i => console.log(i)
     });
+    
 
     // create reusable transporter object using the default SMTP transport
     // let transporter = nodemailer.createTransport({
@@ -108,12 +124,13 @@ app.get("/verify/:userid",async (req, res) => {
     //   else console.log(info);
     // });
 
-    res.render("contact", { msg: "Email Has Been Sent" });
+    res.redirect("/verifies/"+user.id);
   } catch (err) {
     console.error(err.message);
   }
 });
 
+app.get("*", notFound);
 
 app.get("/news", (req, res) => {
   res.render("news");
@@ -133,6 +150,7 @@ app.get("/short-codes", (req, res) => {
 app.post("/addMovies/store", moviesStore);
 app.post("/searchProcess", search);
 app.post("/users/register", userRegister);
+app.post("/users/login", userLogin);
 // send Email
 app.post("/send", sendEmail);
 // app.post('/confirmation', confirmationPost);
