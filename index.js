@@ -54,7 +54,65 @@ app.get("/list/:page", allMoviesSort);
 app.get("/admin", adminArea);
 app.get("/single/:id", singleMovie);
 app.get("/searchResults/:searchKey/:page", searchMovie);
-app.get("*", notFound);
+// app.get("*", notFound);
+app.get("/verify/:userid",async (req, res) => {
+  try {
+    const user = await User.findById(req.params.userid);
+    if(!user){
+      return res.json("Not Found");
+    }
+    const output = `
+      <p>You Have a new Contact request</p>
+      <h3>Contact Details</h3>
+      <ul>
+        <li>Token : ${user.userToken}</li>
+      </ul>
+      <h3>Message</h3>
+    `;
+    // let testAccount = await nodemailer.createTestAccount();
+
+    var nodeoutlook = require("nodejs-nodemailer-outlook");
+    nodeoutlook.sendEmail({
+      auth: {
+        user: "coweb191p-014@student.nibm.lk",
+        pass: "MSIGL638rc"
+      },
+      from: "coweb191p-014@student.nibm.lk",
+      to: user.email,
+      subject: "Movies Message",
+      html: output,
+
+      onError: e => console.log(e),
+      onSuccess: i => console.log(i)
+    });
+
+    // create reusable transporter object using the default SMTP transport
+    // let transporter = nodemailer.createTransport({
+    //   service: "gmail",
+    //   auth: {
+    //     user: "hasitha.chandula96@gmail.com", // generated ethereal user
+    //     pass: "Freedom6@" // generated ethereal password
+    //   }
+    // });
+
+    // // send mail with defined transport object
+    // const mailOptions = {
+    //   from: "hasitha.chandula96@gmail.com", // sender address
+    //   to: "hasitha.chandula@gmail.com", // list of receivers
+    //   subject: "Subject of your email", // Subject line
+    //   html: output // plain text body
+    // };
+
+    // transporter.sendMail(mailOptions, function(err, info) {
+    //   if (err) console.log(err);
+    //   else console.log(info);
+    // });
+
+    res.render("contact", { msg: "Email Has Been Sent" });
+  } catch (err) {
+    console.error(err.message);
+  }
+});
 
 
 app.get("/news", (req, res) => {
@@ -77,6 +135,8 @@ app.post("/searchProcess", search);
 app.post("/users/register", userRegister);
 // send Email
 app.post("/send", sendEmail);
+// app.post('/confirmation', confirmationPost);
+// app.post('/resend', resendTokenPost);
 
 const port = process.env.PORT || 5000;
 

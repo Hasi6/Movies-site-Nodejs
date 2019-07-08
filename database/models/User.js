@@ -1,6 +1,10 @@
 const bcrypt = require('bcryptjs');
+const randomString = require('randomstring');
 
 const mongoose = require('mongoose');
+const jwt = require('jsonwebtoken');
+
+const token = randomString.generate();
 
 const UsersSchema = new mongoose.Schema({
     username:{
@@ -15,10 +19,18 @@ const UsersSchema = new mongoose.Schema({
         type: String,
         required: true,
         unique: true
+    },
+    confirmed: {
+        type: Boolean,
+        default:false
+    },
+    userToken:{
+        type: String,
+        default: token
     }
 });
 
-UsersSchema.pre('save', function(next){
+UsersSchema.pre('save', (next)=>{
     const user= this;
 
     bcrypt.hash(user.password, 10, function(err, encrypted){
@@ -26,6 +38,7 @@ UsersSchema.pre('save', function(next){
         next();
     });
 });
+
 
 const Users = mongoose.model('Users', UsersSchema);
 module.exports = Users;

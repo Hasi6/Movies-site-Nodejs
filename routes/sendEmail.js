@@ -26,7 +26,7 @@ module.exports = async (req, res) => {
         pass: "MSIGL638rc"
       },
       from: "coweb191p-014@student.nibm.lk",
-      to: "hasitha.chandula@gmail.com",
+      to: req.body.email,
       subject: "Movies Message",
       html: output,
 
