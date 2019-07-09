@@ -17,8 +17,14 @@
 							<div role="tabpanel" class="tab-pane fade in active" id="home" aria-labelledby="home-tab">
 								<div class="agile-news-table">
 									<div class="w3ls-news-result">
-									<h4>Movies Found: <span>{{countMoviesSearch}}</span></h4><br>
-									</div>
+                                    
+                                    @if(moviesCount > 0)
+                                    <h4>Movies Found: <span>{{moviesCount}}</span></h4><br>
+                                    </div>
+                                    @else
+                                    <h4>No Movies Found in {{country}} country</h4>
+                                    @endif
+
 									@each(movie in searchMovies)
 									<div class="col-md-2 w3l-movie-gride-agile">
 											<a href="/single/{{movie.id}}" class="hvr-shutter-out-horizontal"><img src="{{movie.smallimage}}" class="img-responsive"itle="album-name" alt=" " />
@@ -67,6 +73,7 @@
 <!-- //faq-banner -->
 
 <div class="blog-pagenat-wthree">
+    @if(moviesCount > 0)
 		@if(pageNum)
 			<nav class="mx-auto">
 				<ul class="pagination">
@@ -141,7 +148,8 @@
 					@endif	
 				</ul>
 			</nav>
-		@endif
+        @endif
+    @endif
 	</div>
 
 @endsection

@@ -19,7 +19,8 @@ const User = require("./database/models/User");
 const home = require('./routes/home');
 const contact = require('./routes/contact');
 const faq = require('./routes/faq');
-const genres = require('./routes/genres');
+const genresCategory = require('./routes/genresCategory');
+const genresCountry = require('./routes/genresCountry');
 const addMovies = require('./routes/addMovies');
 const updateViews = require('./routes/updateViews');
 const allMoviesSort = require('./routes/allMoviesSort');
@@ -75,7 +76,6 @@ app.use('*', async (req,res,next)=>{
 app.get("/", home);
 app.get("/contact", contact);
 app.get("/faq", faq);
-app.get("/genres", genres);
 app.get("/addMovies", addMovies);
 // update Views
 app.get("/update/:id", updateViews);
@@ -87,6 +87,8 @@ app.get("/verifies/:id", verify);
 app.get("/logout", logout);
 app.get("/delete/:id", deleteMovie);
 app.get("/edit/:id", editMovie);
+app.get("/genres/category/:category/:page", genresCategory);
+app.get("/genres/country/:country/:page", genresCountry);
 
 
 app.get("/verify/:userid", verifyEmail);
