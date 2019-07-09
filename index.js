@@ -5,7 +5,9 @@ const expressEdge = require("express-edge");
 const bodyParser = require("body-parser");
 const fileUpload = require("express-fileupload");
 const config = require("config");
-const randomString = require('randomstring');
+const expressSession = require('express-session');
+const connectMongo = require('connect-mongo');
+
 
 const Movies = require("./database/models/Movies");
 const Category = require("./database/models/Category");
@@ -31,14 +33,25 @@ const sendEmail = require('./routes/sendEmail');
 const searchMovie = require('./routes/searchMovie');
 const verify = require('./routes/verify');
 const getToken = require('./routes/getToken');
-
-const app = new express();
-
-app.use(express.static("public"));
+const verifyEmail = require('./routes/verifyEmail');
 
 // connet with database
 const connectDb = require("./config/db");
 connectDb();
+
+const app = new express();
+const mongoStore = connectMongo(expressSession);
+
+app.use(expressSession({
+  secret: 'secret',
+  store: new mongoStore({
+    mongooseConnection: mongoose.connection
+  })
+}))
+
+app.use(express.static("public"));
+
+
 
 app.use(fileUpload());
 app.use(expressEdge);
@@ -61,74 +74,7 @@ app.get("/searchResults/:searchKey/:page", searchMovie);
 app.get("/verifies/:id", verify);
 app.post("/verifies/:id/token", getToken);
 
-app.get("/verify/:userid",async (req, res) => {
-  try {
-    let user = await User.findById(req.params.userid);
-    if(!user){
-      return res.json("Not Found");
-    }
-    if(user.confirmed){
-      return res.redirect('/');
-    }
-    const token = randomString.generate();
-    await User.findByIdAndUpdate(user, {userToken: token});
-
-    user = await User.findById(req.params.userid);
-
-    // oYZNs0pnmrauyd4m3Fqasapd6cLWzNeO
-    const output = `
-      <p>You Have a new Contact request</p>
-      <h3>Contact Details</h3>
-      <ul>
-        <li>Token : ${user.userToken}</li>
-      </ul>
-      <h3>Message</h3>
-    `;
-    // let testAccount = await nodemailer.createTestAccount();
-
-    var nodeoutlook = require("nodejs-nodemailer-outlook");
-    nodeoutlook.sendEmail({
-      auth: {
-        user: "coweb191p-014@student.nibm.lk",
-        pass: "MSIGL638rc"
-      },
-      from: "coweb191p-014@student.nibm.lk",
-      to: user.email,
-      subject: "Movies Message",
-      html: output,
-
-      onError: e => console.log(e),
-      onSuccess: i => console.log(i)
-    });
-    
-
-    // create reusable transporter object using the default SMTP transport
-    // let transporter = nodemailer.createTransport({
-    //   service: "gmail",
-    //   auth: {
-    //     user: "hasitha.chandula96@gmail.com", // generated ethereal user
-    //     pass: "Freedom6@" // generated ethereal password
-    //   }
-    // });
-
-    // // send mail with defined transport object
-    // const mailOptions = {
-    //   from: "hasitha.chandula96@gmail.com", // sender address
-    //   to: "hasitha.chandula@gmail.com", // list of receivers
-    //   subject: "Subject of your email", // Subject line
-    //   html: output // plain text body
-    // };
-
-    // transporter.sendMail(mailOptions, function(err, info) {
-    //   if (err) console.log(err);
-    //   else console.log(info);
-    // });
-
-    res.redirect("/verifies/"+user.id);
-  } catch (err) {
-    console.error(err.message);
-  }
-});
+app.get("/verify/:userid", verifyEmail);
 
 app.get("*", notFound);
 
