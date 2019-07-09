@@ -30,6 +30,10 @@
 					<button class="btn btn-dark">Views: {{singleMovie.views}}</button>
 						<a href="{{singleMovie.downloadLink}}"><button class="btn btn-info">Download</button></a>
 					</div>
+					@if(auth)
+						<a href="/edit/{{singleMovie.id}}"><button class="btn btn-info mt-2">Edit Movie</button></a><br>
+						<a href="/delete/{{singleMovie.id}}"><button class="btn btn-warning mt-2">Delete Movie</button></>
+					@endif
 					<div class="song-grid-right">
 						<div class="share">
 							<h5>Share this</h5>

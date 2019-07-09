@@ -1,0 +1,17 @@
+<div class="form">
+    <h3>Edit Movies</h3>
+<form action="/{{movie.id}}/edit/movies" method="post">
+    <input type="text" name="name" value="{{movie.name}}" required="">
+    <br>
+    <textarea name="description" cols="30" rows="10">{{movie.description}}</textarea><br>
+    <input type="date" name="year" value="{{movie.year}}" required=""><br>
+    <input type="text" name="trailerLink" value="{{movie.trailerLink}}" required=""><br>
+    <input type="text" name="downloadLink" value="{{movie.downloadLink}}" required=""><br>
+    <input type="text" name="idbmRating" value="{{movie.idbmRating}}" required=""><br>
+    <input type="text" name="category" value="{{movie.category}}" required=""><br>
+    <input type="text" name="smallimage" value="{{movie.smallimage}}" required=""><br>
+    <input type="text" name="largeimage" value="{{movie.largeimage}}" required=""><br>
+
+    <input type="submit" value="Update">
+      </form>
+  </div>

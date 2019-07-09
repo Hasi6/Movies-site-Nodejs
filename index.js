@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const path = require("path");
 const expressEdge = require("express-edge");
+const edge = require('edge.js');
 const bodyParser = require("body-parser");
 const fileUpload = require("express-fileupload");
 const config = require("config");
@@ -34,6 +35,10 @@ const searchMovie = require('./routes/searchMovie');
 const verify = require('./routes/verify');
 const getToken = require('./routes/getToken');
 const verifyEmail = require('./routes/verifyEmail');
+const logout = require('./routes/logout');
+const deleteMovie = require('./routes/delete');
+const editMovie = require('./routes/edit');
+const editMovieDetails = require('./routes/editMovieDetails');
 
 // connet with database
 const connectDb = require("./config/db");
@@ -59,6 +64,13 @@ app.set("views", `${__dirname}/views`);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// all requsets this middleware will execute
+// share session globally then we can display login log out like that conditionally
+app.use('*', async (req,res,next)=>{
+  edge.global('auth', req.session.userId);
+  next();
+})
+
 // Get requests
 app.get("/", home);
 app.get("/contact", contact);
@@ -72,7 +84,10 @@ app.get("/admin", adminArea);
 app.get("/single/:id", singleMovie);
 app.get("/searchResults/:searchKey/:page", searchMovie);
 app.get("/verifies/:id", verify);
-app.post("/verifies/:id/token", getToken);
+app.get("/logout", logout);
+app.get("/delete/:id", deleteMovie);
+app.get("/edit/:id", editMovie);
+
 
 app.get("/verify/:userid", verifyEmail);
 
@@ -94,11 +109,13 @@ app.get("/short-codes", (req, res) => {
 
 // Post requests
 app.post("/addMovies/store", moviesStore);
+app.post("/verifies/:id/token", getToken);
 app.post("/searchProcess", search);
 app.post("/users/register", userRegister);
 app.post("/users/login", userLogin);
 // send Email
 app.post("/send", sendEmail);
+app.post("/:id/edit/movies", editMovieDetails);
 // app.post('/confirmation', confirmationPost);
 // app.post('/resend', resendTokenPost);
 
