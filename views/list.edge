@@ -2,6 +2,15 @@
 
 @section('content')
 
+				@if(msg)
+					<div id="message" class="alert alert-success">{{msg}}</div>
+					<script>
+						setTimeout(()=>{
+							let message = document.getElementById('message').remove();
+						}, 5000)
+					</script>
+				@endif
+
 <!-- faq-banner -->
 	<div class="faq">
 		<h4 class="latest-text w3_faq_latest_text w3_latest_text">Movies List</h4>

@@ -1,5 +1,5 @@
 {
-    "mongoURI": "mongodb+srv://hasitha:Freedom6@cluster0-1vlgk.mongodb.net/test?retryWrites=true&w=majority"
+    "mongoURI": "mongodb://localhost:27017/movies-test"
 }
 
 // mongodb://localhost:27017/myapp

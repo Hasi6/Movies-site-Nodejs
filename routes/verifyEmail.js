@@ -7,9 +7,7 @@ module.exports = async (req, res) => {
       if(!user){
         return res.json("Not Found");
       }
-      if(user.confirmed){
-        return res.redirect('/');
-      }
+      
       const token = randomString.generate();
       await User.findByIdAndUpdate(user, {userToken: token});
   
@@ -28,10 +26,10 @@ module.exports = async (req, res) => {
       var nodeoutlook = require("nodejs-nodemailer-outlook");
       nodeoutlook.sendEmail({
         auth: {
-          user: "coweb191p-014@student.nibm.lk",
-          pass: "MSIGL638rc"
+          user: "udhmovies@outlook.com",
+          pass: "moviesUdh"
         },
-        from: "coweb191p-014@student.nibm.lk",
+        from: "udhmovies@outlook.com",
         to: user.email,
         subject: "Movies Message",
         html: output,

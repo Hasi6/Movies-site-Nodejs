@@ -5,17 +5,17 @@ module.exports = (async (req, res) => {
     console.log(req.session);
 
     const MoviesSlide = await Movies.find()
-      .limit(12)
-      .sort({ createDate: -1 });
+      .sort([[ 'createdDate', -1 ]])
+      .limit(12);
     const movies = await Movies.find()
-      .limit(12)
-      .sort({ createDate: -1 });
+      .sort([[ 'createdDate', -1 ]])
+      .limit(12);
     const MoviesHeaders = await Movies.find()
-      .limit(6)
-      .sort({ createDate: 1 });
+      .sort([[ 'createdDate', -1 ]])
+      .limit(6);
     const RatingMovies = await Movies.find()
       .limit(12)
-      .sort({ idbmRating: -1 });
+      .sort([[ 'idbmRating', 1 ]]);
     const popularMovies = await Movies.find().limit(3);
     const popularActionMovies = await Movies.find({
       category: { $regex: new RegExp("action", "i") }

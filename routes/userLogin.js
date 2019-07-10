@@ -17,7 +17,10 @@ module.exports = async (req, res) => {
       return res.send('Password is Invalid');
     }
 
-    req.session.userId = user._id;
+    if(user.confirmed){
+      req.session.userId = user._id;
+      return res.redirect('/');
+    }
 
     res.redirect('/verify/'+user.id);
 

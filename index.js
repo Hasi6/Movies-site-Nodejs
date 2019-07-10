@@ -40,6 +40,9 @@ const logout = require('./routes/logout');
 const deleteMovie = require('./routes/delete');
 const editMovie = require('./routes/edit');
 const editMovieDetails = require('./routes/editMovieDetails');
+const subscribe = require('./routes/subscribe');
+const unsubscribe = require('./routes/unsubscribe');
+const comments = require('./routes/comments');
 
 // connet with database
 const connectDb = require("./config/db");
@@ -115,6 +118,9 @@ app.post("/verifies/:id/token", getToken);
 app.post("/searchProcess", search);
 app.post("/users/register", userRegister);
 app.post("/users/login", userLogin);
+app.post("/subscribe", subscribe);
+app.post("/unsubscribe", unsubscribe);
+app.post("/comments/:id", comments);
 // send Email
 app.post("/send", sendEmail);
 app.post("/:id/edit/movies", editMovieDetails);

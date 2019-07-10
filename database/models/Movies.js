@@ -32,7 +32,7 @@ const MoviesSchema = new mongoose.Schema({
     largeimage: String,
     createdDate:{
         type: Date,
-        default: new Date()
+        default: Date.now
     },
     views: {
         type: Number,
