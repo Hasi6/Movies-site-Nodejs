@@ -3,7 +3,6 @@ const Comments = require("../database/models/Comments");
 
 module.exports = async (req, res) => {
   let id = req.params.id;
-  console.log(id);
   try {
     const singleMovie = await Movies.findById(id);
     const comments = await Comments.find({movieId: id}).sort([['createdDate', -1]]);

@@ -43,6 +43,7 @@ const editMovieDetails = require('./routes/editMovieDetails');
 const subscribe = require('./routes/subscribe');
 const unsubscribe = require('./routes/unsubscribe');
 const comments = require('./routes/comments');
+const news = require('./routes/news');
 
 // connet with database
 const connectDb = require("./config/db");
@@ -121,6 +122,7 @@ app.post("/users/login", userLogin);
 app.post("/subscribe", subscribe);
 app.post("/unsubscribe", unsubscribe);
 app.post("/comments/:id", comments);
+app.post("/news", news);
 // send Email
 app.post("/send", sendEmail);
 app.post("/:id/edit/movies", editMovieDetails);

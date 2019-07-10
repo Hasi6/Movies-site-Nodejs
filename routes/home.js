@@ -2,8 +2,6 @@ const Movies = require('../database/models/Movies');
 
 module.exports = (async (req, res) => {
 
-    console.log(req.session);
-
     const MoviesSlide = await Movies.find()
       .sort([[ 'createdDate', -1 ]])
       .limit(12);

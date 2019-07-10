@@ -16,7 +16,7 @@ module.exports = async () => {
     console.log(err.message);
     //Exit prosee with failuer
 
-    // process.exit(1);
+    process.exit(1);
   }
 };
 
