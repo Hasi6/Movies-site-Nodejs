@@ -1,11 +1,13 @@
 const Movies = require("../database/models/Movies");
 const Comments = require("../database/models/Comments");
+const News = require("../database/models/Upnext");
 
 module.exports = async (req, res) => {
   let id = req.params.id;
   try {
     const singleMovie = await Movies.findById(id);
     const comments = await Comments.find({movieId: id}).sort([['createdDate', -1]]);
+    const news = await News.find().sort([['createdDate', -1]]).limit(10);
     let n = Movies.find().countDocuments();
     let r = Math.floor(Math.random() * n);
     let randomMovies = await Movies.find()
@@ -14,7 +16,8 @@ module.exports = async (req, res) => {
     res.render("single", {
       singleMovie: singleMovie,
       randomMovies: randomMovies,
-      comments:comments
+      comments:comments,
+      news:news
     });
   } catch (err) {
     console.error(err.message);

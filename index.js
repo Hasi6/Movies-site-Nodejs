@@ -44,6 +44,7 @@ const subscribe = require('./routes/subscribe');
 const unsubscribe = require('./routes/unsubscribe');
 const comments = require('./routes/comments');
 const news = require('./routes/news');
+const addNews = require('./routes/addNews');
 
 // connet with database
 const connectDb = require("./config/db");
@@ -74,7 +75,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use('*', async (req,res,next)=>{
   edge.global('auth', req.session.userId);
   next();
-})
+});
 
 // Get requests
 app.get("/", home);
@@ -93,6 +94,7 @@ app.get("/delete/:id", deleteMovie);
 app.get("/edit/:id", editMovie);
 app.get("/genres/category/:category/:page", genresCategory);
 app.get("/genres/country/:country/:page", genresCountry);
+app.get("/addNews", addNews);
 
 
 app.get("/verify/:userid", verifyEmail);
