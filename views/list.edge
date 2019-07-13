@@ -91,8 +91,6 @@
 					@endif
 					
 					{{--  All Pages  --}}
-					@set(i, '(Number(page) > 5 ? Number(page) - 4 : 1)')
-
 						@if(page == 1)
 
 						@each(pag in range(page, ((page)%10)+6))
@@ -125,7 +123,7 @@
 
 						@else
 
-						@each(pag in range(page - 5, ((page)%10)+6))
+						@each(pag in range(page - 5, (page+1)/10+6))
 						
 						@if(page == pag)
 							<li class="page-item disabled">

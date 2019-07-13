@@ -13,9 +13,9 @@ module.exports = (async (req, res) => {
       }
   
       let allMovies = await Movies.find()
-        .skip(perPage * page - perPage)
+        .skip(Math.abs(perPage * page - perPage))
         .limit(perPage)
-        .sort({ createDate: 1 });
+        .sort({ createdDate: -1 });
       res.render("list", {
         allMovies: allMovies,
         page: page,

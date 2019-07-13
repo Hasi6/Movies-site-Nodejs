@@ -116,7 +116,7 @@
 
 						@else
 
-						@each(pag in range(pageNum - 5, ((pageNum)%10)+6))
+						@each(pag in range(page - 5, (page+1)/10+6))
 						
 						@if(pageNum == pag)
 							<li class="page-item disabled">
