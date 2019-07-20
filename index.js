@@ -41,6 +41,7 @@ const unsubscribe = require('./routes/unsubscribe');
 const comments = require('./routes/comments');
 const news = require('./routes/news');
 const addNews = require('./routes/addNews');
+const liveSearch = require('./routes/liveSearch');
 
 // connet with database
 const connectDb = require("./config/db");
@@ -92,22 +93,8 @@ app.get("/edit/:id", editMovie);
 app.get("/genres/category/:category/:page", genresCategory);
 app.get("/genres/country/:country/:page", genresCountry);
 app.get("/addNews", addNews);
-
-
 app.get("/verify/:userid", verifyEmail);
-
-app.get('/search', async(req, res, next)=>{
-    var q = req.query.q;
-    try{
-    const result = await Movies.find({
-        name: {
-          $regex: new RegExp(q, "i")
-        }}).limit(10);
-        res.send(result);
-      }catch(err){
-        console.error(err.message);
-      }
-});
+app.get('/search', liveSearch);
 
 app.get("*", notFound);
 
