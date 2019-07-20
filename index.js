@@ -9,11 +9,7 @@ const config = require("config");
 const expressSession = require('express-session');
 const connectMongo = require('connect-mongo');
 
-
-const Movies = require("./database/models/Movies");
-const Category = require("./database/models/Category");
-const Country = require("./database/models/Country");
-const User = require("./database/models/User");
+const Movies = require('./database/models/Movies');
 
 // define routes
 const home = require('./routes/home');
@@ -53,6 +49,7 @@ connectDb();
 const app = new express();
 const mongoStore = connectMongo(expressSession);
 
+// set sessions globaly
 app.use(expressSession({
   secret: 'secret',
   store: new mongoStore({
@@ -99,6 +96,19 @@ app.get("/addNews", addNews);
 
 app.get("/verify/:userid", verifyEmail);
 
+app.get('/search', async(req, res, next)=>{
+    var q = req.query.q;
+    try{
+    const result = await Movies.find({
+        name: {
+          $regex: new RegExp(q, "i")
+        }}).limit(10);
+        res.send(result);
+      }catch(err){
+        console.error(err.message);
+      }
+});
+
 app.get("*", notFound);
 
 app.get("/news", (req, res) => {
@@ -137,143 +147,3 @@ app.listen(port, () => {
   console.log(`App Started at port ${port}`);
 });
 
-
-
-
-// app.post("/addCategory/store", (req, res) => {
-//   Category.create(req.body, (err, post) => {
-//     res.redirect("/");
-//   });
-// });
-
-
-
-// app.post("/addCountry/store", (req, res) => {
-//   Country.create(req.body, (err, post) => {
-//     res.redirect("/");
-//   });
-// });
-
-
-
-
-// app.get("/horror", (req, res) => {
-//   res.render("horror");
-// });
-
-// app.get("/addCategory", (req, res) => {
-//   res.render("addCategory");
-// });
-// app.get("/addCountry", (req, res) => {
-//   res.render("addCountry");
-// });
-
-
-// app.get("/searchResults/:keyWord/:page", async (req, res) => {
-//   try {
-//     const searchkey = await req.params.keyWord;
-//     const page = await req.params.page;
-//     console.log(searchkey);
-//     console.log(page);
-//   } catch (err) {
-//     console.error(err.message);
-//   }
-// });
-
-// app.get("/", async (req, res) => {
-
-//   const movies = await Movies.find().limit(12).sort({year: -1});
-// res.render("index", {
-//   movies: movies
-// });
-// });
-
-
-
-// get All movies
-
-// get movies sort by name
-// app.get("/list/:letter/:page", async (req, res) => {
-//   try {
-//     let perPage = 3;
-//     let page = req.params.page || 1;
-//     let letter = req.params.letter;
-
-//     let allMoviesStartedWithLetter = await Movies.find({
-//       name: { $regex: new RegExp(`^${letter}`, "i") }
-//     }).countDocuments();
-//     console.log(allMoviesStartedWithLetter);
-
-//     let lastPage = allMoviesStartedWithLetter / perPage;
-
-//     if (page < 0 || page > lastPage + 1) {
-//       res.send("Sorry This page is not available");
-//     }
-
-//     let allMovies = await Movies.find({
-//       name: { $regex: new RegExp(letter) }
-//     })
-//       .skip(perPage * page - perPage)
-//       .limit(perPage)
-//       .sort({ createDate: 1 });
-//     res.render("listByName", {
-//       allMovies: allMovies,
-//       page: page,
-//       pages: Math.ceil(lastPage),
-//       perPage: perPage,
-//       letter: letter
-//     });
-//   } catch (err) {
-//     console.error(err.message);
-//   }
-// });
-
-// app.get("/search", async (req, res) => {
-//   let q = req.query.q;
-
-//   let searchMovies = await Movies.find({
-//     name: {
-//       $regex: new RegExp(q)
-//     }
-//   },
-//   {
-//     _id:0,
-//     _v:0
-//   }, (err,data)=>{
-//     res.json(data)
-//   }
-//   ).limit(10);
-// });
-
-// app.get("searchProcess/:page", async (req, res) => {
-//   try {
-//     const countMoviesSearch = await Movies.find({
-//       description: { $regex: new RegExp(keyWord, "i") }
-//     }).countDocuments();
-
-//     let perPage = 1;
-//     let page = req.params.page;
-
-//     const searchMovies = await Movies.find({
-//       description: { $regex: new RegExp(keyWord, "i") }
-//     })
-//       .skip(perPage * page - perPage)
-//       .limit(perPage)
-//       .sort({ createDate: 1 });
-
-//     let lastPage = countMoviesSearch / perPage;
-
-//     console.log(countMoviesSearch);
-
-//     // console.log(keyWord);
-//     res.render("searchResults", {
-//       searchMovies: searchMovies,
-//       countMoviesSearch: countMoviesSearch,
-//       page: page,
-//       pages: Math.ceil(lastPage),
-//       prePage: perPage
-//     });
-//   } catch (err) {
-//     console.error(err.message);
-//   }
-// });

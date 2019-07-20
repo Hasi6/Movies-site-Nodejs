@@ -69,9 +69,11 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 	
 <body>
 <!-- header -->
-{{--  <script>
+<!-- live search  -->
+<script>
 		var showResults = debounce(function(arg){
 			var value = arg.trim();
+			console.log(value);
 			if(value == "" || value.length <= 0){
 				$("#search-result").fadeOut();
 				return;
@@ -85,8 +87,10 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 				if(data.length === 0){
 					$("#search-result").append('<p class="m-2 lead"> No Results Found </p>')
 				}else{
-					data.forEach(x => {
-						$("#search-result").append('<a herf="#"> <p class="m-2 lead"><img src="any.jpg">' + x.name + '</P> </a>')
+					console.log(data);
+					console.log(data[0].name);
+					data.forEach((data)=> {
+						$("#search-result").append("<a class='search-drop-down' href='/update/"+data._id+"'> <img src='" +data.smallimage+ "'/> <p class='m-2 lead'>" + data.name +"</P> </a>")
 					});
 				}
 			})
@@ -101,7 +105,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 				return function(){
 					var context = this,
 					args = arguments;
-					var letter = function(){
+					var later = function(){
 						timeout = null;
 						if(!immediate) func.apply(context, args);
 					};
@@ -111,23 +115,24 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 					if(callNow) func.apply(context,args);
 				};
 			};
-	</script>  --}}
+	</script>
 	<div class="header">
 		<div class="container">
 			<div class="w3layouts_logo">
-				<a href="/"><h1>One<span>Movies</span></h1></a>
+				<a href="/"> <img src="/images/logo6.png" alt=""> </a>
 			</div>
 			<div class="w3_search">
 				<form action="/searchProcess" method="post">
-					<input type="text" id="search-result" name="search" placeholder="Search" required="">
+					<input type="text" name="search" id="input-search" onkeyup="showResults(this.value)" placeholder="Search">
 					<input type="submit" value="Go">
 				</form>
-				<script>
-					function showResults(x){
-						console.log(x);
-					}
-				</script>
+				<div>
+					<div class="border" id="search-result">
+						
+					</div>
+				</div>
 			</div>
+			
 			<div class="w3l_sign_in_register">
 				<ul>
 					<li><i class="fa fa-phone" aria-hidden="true"></i> (+000) 123 345 653</li>
